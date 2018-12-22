@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.sbed.modules.sys.dao.SysTboderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.sbed.modules.sys.entity.SysTboder" id="tboderMap">
+        <result property="id" column="id"/>
+        <result property="adzoneId" column="adzone_id"/>
+        <result property="adzoneName" column="adzone_name"/>
+        <result property="alipayTotalPrice" column="alipay_total_price"/>
+        <result property="commission" column="commission"/>
+        <result property="commissionRate" column="commission_rate"/>
+        <result property="orderType" column="order_type"/>
+        <result property="itemTitle" column="item_title"/>
+        <result property="itemNum" column="item_num"/>
+        <result property="numIid" column="num_iid"/>
+        <result property="payPrice" column="pay_price"/>
+        <result property="price" column="price"/>
+        <result property="tkStatus" column="tk_status"/>
+        <result property="siteId" column="site_id"/>
+        <result property="siteName" column="site_name"/>
+        <result property="totalCommissionRate" column="total_commission_rate"/>
+        <result property="tradeId" column="trade_id"/>
+        <result property="tradeParentId" column="trade_parent_id"/>
+        <result property="odercreateTime" column="odercreate_time"/>
+        <result property="createtime" column="createTime"/>
+        <result property="updatetime" column="updateTime"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysTboder">
+		select * from tboder where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysTboder">
+		select * from tboder
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from tboder 
+	</select>
+	 
+	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysTboder" useGeneratedKeys="true" keyProperty="id">
+		insert into tboder
+		(
+			`adzone_id`, 
+			`adzone_name`, 
+			`alipay_total_price`, 
+			`commission`, 
+			`commission_rate`, 
+			`order_type`, 
+			`item_title`, 
+			`item_num`, 
+			`num_iid`, 
+			`pay_price`, 
+			`price`, 
+			`tk_status`, 
+			`site_id`, 
+			`site_name`, 
+			`total_commission_rate`, 
+			`trade_id`, 
+			`trade_parent_id`, 
+			`odercreate_time`, 
+			`createTime`, 
+			`updateTime`
+		)
+		values
+		(
+			#{adzoneId}, 
+			#{adzoneName}, 
+			#{alipayTotalPrice}, 
+			#{commission}, 
+			#{commissionRate}, 
+			#{orderType}, 
+			#{itemTitle}, 
+			#{itemNum}, 
+			#{numIid}, 
+			#{payPrice}, 
+			#{price}, 
+			#{tkStatus}, 
+			#{siteId}, 
+			#{siteName}, 
+			#{totalCommissionRate}, 
+			#{tradeId}, 
+			#{tradeParentId}, 
+			#{odercreateTime}, 
+			#{createtime}, 
+			#{updatetime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.sbed.modules.sys.entity.SysTboder">
+		update tboder 
+		<set>
+			<if test="adzoneId != null">`adzone_id` = #{adzoneId}, </if>
+			<if test="adzoneName != null">`adzone_name` = #{adzoneName}, </if>
+			<if test="alipayTotalPrice != null">`alipay_total_price` = #{alipayTotalPrice}, </if>
+			<if test="commission != null">`commission` = #{commission}, </if>
+			<if test="commissionRate != null">`commission_rate` = #{commissionRate}, </if>
+			<if test="orderType != null">`order_type` = #{orderType}, </if>
+			<if test="itemTitle != null">`item_title` = #{itemTitle}, </if>
+			<if test="itemNum != null">`item_num` = #{itemNum}, </if>
+			<if test="numIid != null">`num_iid` = #{numIid}, </if>
+			<if test="payPrice != null">`pay_price` = #{payPrice}, </if>
+			<if test="price != null">`price` = #{price}, </if>
+			<if test="tkStatus != null">`tk_status` = #{tkStatus}, </if>
+			<if test="siteId != null">`site_id` = #{siteId}, </if>
+			<if test="siteName != null">`site_name` = #{siteName}, </if>
+			<if test="totalCommissionRate != null">`total_commission_rate` = #{totalCommissionRate}, </if>
+			<if test="tradeId != null">`trade_id` = #{tradeId}, </if>
+			<if test="tradeParentId != null">`trade_parent_id` = #{tradeParentId}, </if>
+			<if test="odercreateTime != null">`odercreate_time` = #{odercreateTime}, </if>
+			<if test="createtime != null">`createTime` = #{createtime}, </if>
+			<if test="updatetime != null">`updateTime` = #{updatetime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from tboder where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from tboder where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

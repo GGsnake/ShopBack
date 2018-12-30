@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.sbed.modules.sys.dao.SysUserinfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.sbed.modules.sys.entity.SysUserinfo" id="userinfoMap">
+        <result property="id" column="id"/>
+        <result property="username" column="userName"/>
+        <result property="loginname" column="loginName"/>
+        <result property="loginpwd" column="loginPwd"/>
+        <result property="loginsecret" column="loginSecret"/>
+        <result property="usersex" column="userSex"/>
+        <result property="userscore" column="userScore"/>
+        <result property="userphoto" column="userPhoto"/>
+        <result property="userstatus" column="userStatus"/>
+        <result property="usertotalscore" column="userTotalScore"/>
+        <result property="jdpid" column="jdPid"/>
+        <result property="pddpid" column="pddPid"/>
+        <result property="tbpid" column="tbPid"/>
+        <result property="wphpid" column="wphPid"/>
+        <result property="createtime" column="createTime"/>
+        <result property="updatetime" column="updateTime"/>
+        <result property="userphone" column="userPhone"/>
+        <result property="roleid" column="roleId"/>
+        <result property="score" column="score"/>
+        <result property="wxopenid" column="wxOpenId"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysUserinfo">
+		select * from userinfo where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysUserinfo">
+		select * from userinfo
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from userinfo 
+	</select>
+	 
+	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysUserinfo" useGeneratedKeys="true" keyProperty="id">
+		insert into userinfo
+		(
+			`userName`, 
+			`loginName`, 
+			`loginPwd`, 
+			`loginSecret`, 
+			`userSex`, 
+			`userScore`, 
+			`userPhoto`, 
+			`userStatus`, 
+			`userTotalScore`, 
+			`jdPid`, 
+			`pddPid`, 
+			`tbPid`, 
+			`wphPid`, 
+			`createTime`, 
+			`updateTime`, 
+			`userPhone`, 
+			`roleId`, 
+			`score`, 
+			`wxOpenId`, 
+			`status`
+		)
+		values
+		(
+			#{username}, 
+			#{loginname}, 
+			#{loginpwd}, 
+			#{loginsecret}, 
+			#{usersex}, 
+			#{userscore}, 
+			#{userphoto}, 
+			#{userstatus}, 
+			#{usertotalscore}, 
+			#{jdpid}, 
+			#{pddpid}, 
+			#{tbpid}, 
+			#{wphpid}, 
+			#{createtime}, 
+			#{updatetime}, 
+			#{userphone}, 
+			#{roleid}, 
+			#{score}, 
+			#{wxopenid}, 
+			#{status}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.sbed.modules.sys.entity.SysUserinfo">
+		update userinfo 
+		<set>
+			<if test="username != null">`userName` = #{username}, </if>
+			<if test="loginname != null">`loginName` = #{loginname}, </if>
+			<if test="loginpwd != null">`loginPwd` = #{loginpwd}, </if>
+			<if test="loginsecret != null">`loginSecret` = #{loginsecret}, </if>
+			<if test="usersex != null">`userSex` = #{usersex}, </if>
+			<if test="userscore != null">`userScore` = #{userscore}, </if>
+			<if test="userphoto != null">`userPhoto` = #{userphoto}, </if>
+			<if test="userstatus != null">`userStatus` = #{userstatus}, </if>
+			<if test="usertotalscore != null">`userTotalScore` = #{usertotalscore}, </if>
+			<if test="jdpid != null">`jdPid` = #{jdpid}, </if>
+			<if test="pddpid != null">`pddPid` = #{pddpid}, </if>
+			<if test="tbpid != null">`tbPid` = #{tbpid}, </if>
+			<if test="wphpid != null">`wphPid` = #{wphpid}, </if>
+			<if test="createtime != null">`createTime` = #{createtime}, </if>
+			<if test="updatetime != null">`updateTime` = #{updatetime}, </if>
+			<if test="userphone != null">`userPhone` = #{userphone}, </if>
+			<if test="roleid != null">`roleId` = #{roleid}, </if>
+			<if test="score != null">`score` = #{score}, </if>
+			<if test="wxopenid != null">`wxOpenId` = #{wxopenid}, </if>
+			<if test="status != null">`status` = #{status}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from userinfo where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from userinfo where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.sbed.modules.sys.dao.SysOderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.sbed.modules.sys.entity.SysOder" id="oderMap">
+        <result property="id" column="id"/>
+        <result property="orderSn" column="order_sn"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="goodsThumbnailUrl" column="goods_thumbnail_url"/>
+        <result property="goodsQuantity" column="goods_quantity"/>
+        <result property="goodsPrice" column="goods_price"/>
+        <result property="orderAmount" column="order_amount"/>
+        <result property="pId" column="p_id"/>
+        <result property="promotionRate" column="promotion_rate"/>
+        <result property="promotionAmount" column="promotion_amount"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="orderStatusDesc" column="order_status_desc"/>
+        <result property="orderCreateTime" column="order_create_time"/>
+        <result property="orderPayTime" column="order_pay_time"/>
+        <result property="orderGroupSuccessTime" column="order_group_success_time"/>
+        <result property="orderVerifyTime" column="order_verify_time"/>
+        <result property="orderModifyAt" column="order_modify_at"/>
+        <result property="updatetime" column="updateTime"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysOder">
+		select * from oder where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysOder">
+		select * from oder
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from oder 
+	</select>
+	 
+	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysOder" useGeneratedKeys="true" keyProperty="id">
+		insert into oder
+		(
+			`order_sn`, 
+			`goods_id`, 
+			`goods_name`, 
+			`goods_thumbnail_url`, 
+			`goods_quantity`, 
+			`goods_price`, 
+			`order_amount`, 
+			`p_id`, 
+			`promotion_rate`, 
+			`promotion_amount`, 
+			`order_status`, 
+			`order_status_desc`, 
+			`order_create_time`, 
+			`order_pay_time`, 
+			`order_group_success_time`, 
+			`order_verify_time`, 
+			`order_modify_at`, 
+			`updateTime`, 
+			`status`
+		)
+		values
+		(
+			#{orderSn}, 
+			#{goodsId}, 
+			#{goodsName}, 
+			#{goodsThumbnailUrl}, 
+			#{goodsQuantity}, 
+			#{goodsPrice}, 
+			#{orderAmount}, 
+			#{pId}, 
+			#{promotionRate}, 
+			#{promotionAmount}, 
+			#{orderStatus}, 
+			#{orderStatusDesc}, 
+			#{orderCreateTime}, 
+			#{orderPayTime}, 
+			#{orderGroupSuccessTime}, 
+			#{orderVerifyTime}, 
+			#{orderModifyAt}, 
+			#{updatetime}, 
+			#{status}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.sbed.modules.sys.entity.SysOder">
+		update oder 
+		<set>
+			<if test="orderSn != null">`order_sn` = #{orderSn}, </if>
+			<if test="goodsId != null">`goods_id` = #{goodsId}, </if>
+			<if test="goodsName != null">`goods_name` = #{goodsName}, </if>
+			<if test="goodsThumbnailUrl != null">`goods_thumbnail_url` = #{goodsThumbnailUrl}, </if>
+			<if test="goodsQuantity != null">`goods_quantity` = #{goodsQuantity}, </if>
+			<if test="goodsPrice != null">`goods_price` = #{goodsPrice}, </if>
+			<if test="orderAmount != null">`order_amount` = #{orderAmount}, </if>
+			<if test="pId != null">`p_id` = #{pId}, </if>
+			<if test="promotionRate != null">`promotion_rate` = #{promotionRate}, </if>
+			<if test="promotionAmount != null">`promotion_amount` = #{promotionAmount}, </if>
+			<if test="orderStatus != null">`order_status` = #{orderStatus}, </if>
+			<if test="orderStatusDesc != null">`order_status_desc` = #{orderStatusDesc}, </if>
+			<if test="orderCreateTime != null">`order_create_time` = #{orderCreateTime}, </if>
+			<if test="orderPayTime != null">`order_pay_time` = #{orderPayTime}, </if>
+			<if test="orderGroupSuccessTime != null">`order_group_success_time` = #{orderGroupSuccessTime}, </if>
+			<if test="orderVerifyTime != null">`order_verify_time` = #{orderVerifyTime}, </if>
+			<if test="orderModifyAt != null">`order_modify_at` = #{orderModifyAt}, </if>
+			<if test="updatetime != null">`updateTime` = #{updatetime}, </if>
+			<if test="status != null">`status` = #{status}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from oder where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from oder where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

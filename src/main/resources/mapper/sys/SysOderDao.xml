@@ -132,5 +132,24 @@
 			#{id}
 		</foreach>
 	</delete>
-
+	<select id="queryListFor" resultType="io.sbed.modules.sys.entity.SysOder">
+		select *
+		from oder
+		<where>
+			<if test="keyword != null and keyword != ''">
+					CONCAT(IFNULL(`order_sn`,''),IFNULL(`goods_name`,''),IFNULL(`p_id`,''))  like concat('%',#{keyword},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="sidx != null and sidx != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
 </mapper>

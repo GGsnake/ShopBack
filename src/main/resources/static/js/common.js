@@ -89,7 +89,7 @@ window.confirm = function(msg, callback){
 function getSelectedRow() {
     var grid = $("#jqGrid");
     var rowKey = grid.getGridParam("selrow");
-    if(!rowKey){
+    if(!rowKey){擦
     	alert("请选择一条记录");
     	return ;
     }

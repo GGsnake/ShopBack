@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/oder/list',
+        url: baseURL + 'sys/oder/list1',
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
@@ -19,7 +19,7 @@ $(function () {
 			{ label: '订单生成时间，UNIX时间戳', name: 'orderCreateTime', index: 'order_create_time', width: 80 }, 			
 			{ label: '支付时间', name: 'orderPayTime', index: 'order_pay_time', width: 80 }, 			
 			{ label: '成团时间', name: 'orderGroupSuccessTime', index: 'order_group_success_time', width: 80 }, 			
-			{ label: '审核时间', name: 'orderVerifyTime', index: 'order_verify_time', width: 80 }, 			
+			// { label: '审核时间', name: 'orderVerifyTime', index: 'order_verify_time', width: 80 },
 			{ label: '最后更新时间', name: 'orderModifyAt', index: 'order_modify_at', width: 80 }, 			
 			{ label: '', name: 'updatetime', index: 'updateTime', width: 80 }, 			
 			{ label: '0正常;1冻结', name: 'status', index: 'status', width: 80 }			
@@ -54,6 +54,9 @@ $(function () {
 var vm = new Vue({
 	el:'#rapp',
 	data:{
+        q:{
+            keyword: null
+        },
 		showList: true,
 		title: null,
 		oder: {}
@@ -125,11 +128,13 @@ var vm = new Vue({
             });
 		},
 		reload: function () {
-			vm.showList = true;
-			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{ 
+            vm.showList = true;
+            var page = $("#jqGrid").jqGrid('getGridParam','page');
+            $("#jqGrid").jqGrid('setGridParam',{
+                postData:{'keyword': vm.q.keyword},
                 page:page
             }).trigger("reloadGrid");
+
 		},
         refresh: function () {
             vm.showList = true;

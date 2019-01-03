@@ -2,6 +2,8 @@ package io.sbed.modules.sys.controller;
 
 import java.util.List;
 import java.util.Map;
+
+import io.sbed.modules.sys.dao.SysOderDao;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +28,8 @@ public class SysOderController extends AbstractController{
 
 	@Autowired
 	private SysOderService oderService;
+	@Autowired
+	private SysOderDao sysOderDao;
 	
 	/**
 	 * 列表
@@ -43,7 +47,21 @@ public class SysOderController extends AbstractController{
 		
 		return Result.ok().put("page", pageUtil);
 	}
-	
+	/**
+	 * 列表
+	 */
+	@RequestMapping("/list1")
+	@RequiresPermissions("sys:oder:list")
+	public Result lists(@RequestParam Map<String, Object> params){
+		//查询列表数据
+        Query query = new Query(params);
+		List<SysOder> oderList = sysOderDao.queryListFor(query);
+		int total = oderService.queryTotal(query);
+		PageUtils pageUtil = new PageUtils(oderList, total, query.getLimit(), query.getPage());
+
+		return Result.ok().put("page", pageUtil);
+	}
+
 	
 	/**
 	 * 信息

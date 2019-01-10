@@ -31,34 +31,34 @@
 			limit #{offset}, #{limit}
 		</if>
 	</select>
-	
+
  	<select id="queryTotal" resultType="int">
-		select count(*) from daygoods 
+		select count(*) from daygoods
 	</select>
-	 
+
 	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysDaygoods" useGeneratedKeys="true" keyProperty="id">
 		insert into daygoods
 		(
-			`titile`, 
-			`content`, 
-			`image`, 
-			`content_images`, 
-			`status`, 
+			`titile`,
+			`content`,
+			`image`,
+			`content_images`,
+			`status`,
 			`createTime`
 		)
 		values
 		(
-			#{titile}, 
-			#{content}, 
-			#{image}, 
-			#{contentImages}, 
-			#{status}, 
+			#{titile},
+			#{content},
+			#{image},
+			#{contentImages},
+			#{status},
 			#{createtime}
 		)
 	</insert>
-	 
+
 	<update id="update" parameterType="io.sbed.modules.sys.entity.SysDaygoods">
-		update daygoods 
+		update daygoods
 		<set>
 			<if test="titile != null">`titile` = #{titile}, </if>
 			<if test="content != null">`content` = #{content}, </if>
@@ -69,13 +69,13 @@
 		</set>
 		where id = #{id}
 	</update>
-	
+
 	<delete id="delete">
 		delete from daygoods where id = #{value}
 	</delete>
-	
+
 	<delete id="deleteBatch">
-		delete from daygoods where id in 
+		delete from daygoods where id in
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>

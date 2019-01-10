@@ -54,54 +54,41 @@
 		insert into userinfo
 		(
 			`userName`, 
-			`loginName`, 
-			`loginPwd`, 
-			`loginSecret`, 
-			`userSex`, 
-			`userScore`, 
-			`userPhoto`, 
-			`userStatus`, 
-			`userTotalScore`, 
-			`jdPid`, 
+			`loginPwd`,
+			`userSex`,
+			`userPhoto`,
+			`jdPid`,
 			`pddPid`, 
 			`tbPid`, 
 			`wphPid`, 
 			`createTime`, 
-			`updateTime`, 
-			`userPhone`, 
+			`userPhone`,
 			`roleId`, 
 			`score`, 
-			`wxOpenId`, 
 			`status`
 		)
 		values
 		(
 			#{username}, 
-			#{loginname}, 
-			#{loginpwd}, 
-			#{loginsecret}, 
-			#{usersex}, 
-			#{userscore}, 
-			#{userphoto}, 
-			#{userstatus}, 
-			#{usertotalscore}, 
-			#{jdpid}, 
+			#{loginpwd},
+			#{usersex},
+			#{userphoto},
+			#{jdpid},
 			#{pddpid}, 
 			#{tbpid}, 
 			#{wphpid}, 
-			#{createtime}, 
-			#{updatetime}, 
-			#{userphone}, 
+			now(),
+			#{userphone},
 			#{roleid}, 
-			#{score}, 
-			#{wxopenid}, 
-			#{status}
+			#{score},
+			0
 		)
 	</insert>
 	 
 	<update id="update" parameterType="io.sbed.modules.sys.entity.SysUserinfo">
 		update userinfo 
 		<set>
+			`updateTime` =now(),
 			<if test="username != null">`userName` = #{username}, </if>
 			<if test="loginname != null">`loginName` = #{loginname}, </if>
 			<if test="loginpwd != null">`loginPwd` = #{loginpwd}, </if>
@@ -115,8 +102,6 @@
 			<if test="pddpid != null">`pddPid` = #{pddpid}, </if>
 			<if test="tbpid != null">`tbPid` = #{tbpid}, </if>
 			<if test="wphpid != null">`wphPid` = #{wphpid}, </if>
-			<if test="createtime != null">`createTime` = #{createtime}, </if>
-			<if test="updatetime != null">`updateTime` = #{updatetime}, </if>
 			<if test="userphone != null">`userPhone` = #{userphone}, </if>
 			<if test="roleid != null">`roleId` = #{roleid}, </if>
 			<if test="score != null">`score` = #{score}, </if>

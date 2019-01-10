@@ -21,7 +21,7 @@
 </head>
 <body>
 <div id="rapp" v-cloak>
-	<div v-show="showList">
+	<div v-show="showList==1">
         <div class="panel panel-default">
             <div class="panel-heading">
                 功能操作
@@ -40,7 +40,7 @@
 	    <div id="jqGridPager"></div>
     </div>
     
-    <div v-show="!showList" class="panel panel-default">
+    <div v-show="showList==2" class="panel panel-default">
 		<div class="panel-heading">{{title}}</div>
 		<form class="form-horizontal">
 											<div class="form-group">
@@ -49,52 +49,23 @@
 			      <input type="text" class="form-control" v-model="userinfo.username" placeholder="用户名称"/>
 			    </div>
 			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">账号</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="userinfo.loginname" placeholder="账号"/>
-			    </div>
-			</div>
+
 									<div class="form-group">
 			   	<label class="col-sm-2 control-label">密码</label>
 			   	<div class="col-sm-6">
 			      <input type="text" class="form-control" v-model="userinfo.loginpwd" placeholder="密码"/>
 			    </div>
-			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">安全码</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="userinfo.loginsecret" placeholder="安全码"/>
-			    </div>
-			</div>
-									<div class="form-group">
+			</div>			<div class="form-group">
 			   	<label class="col-sm-2 control-label">性别</label>
 			   	<div class="col-sm-6">
 			      <input type="text" class="form-control" v-model="userinfo.usersex" placeholder="性别"/>
 			    </div>
 			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">用户积分</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="userinfo.userscore" placeholder="用户积分"/>
-			    </div>
-			</div>
+
 									<div class="form-group">
 			   	<label class="col-sm-2 control-label">用户头像</label>
 			   	<div class="col-sm-6">
 			      <input type="text" class="form-control" v-model="userinfo.userphoto" placeholder="用户头像"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">账号状态</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="userinfo.userstatus" placeholder="账号状态"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">用户历史消费积分</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="userinfo.usertotalscore" placeholder="用户历史消费积分"/>
 			    </div>
 			</div>
 									<div class="form-group">
@@ -121,18 +92,7 @@
 			      <input type="text" class="form-control" v-model="userinfo.wphpid" placeholder="唯品会pid"/>
 			    </div>
 			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">创建时间</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="userinfo.createtime" placeholder="创建时间"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">修改时间</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="userinfo.updatetime" placeholder="修改时间"/>
-			    </div>
-			</div>
+
 									<div class="form-group">
 			   	<label class="col-sm-2 control-label">手机</label>
 			   	<div class="col-sm-6">
@@ -151,19 +111,126 @@
 			      <input type="text" class="form-control" v-model="userinfo.score" placeholder="佣金比率"/>
 			    </div>
 			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">微信openid</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="userinfo.wxopenid" placeholder="微信openid"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">状态</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="userinfo.status" placeholder="状态"/>
-			    </div>
-			</div>
 							<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+	<div v-show="showList==3" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">用户名称</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.username" placeholder="用户名称"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">账号</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.loginname" placeholder="账号"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">密码</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.loginpwd" placeholder="密码"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">安全码</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.loginsecret" placeholder="安全码"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">性别</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.usersex" placeholder="性别"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">用户积分</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.userscore" placeholder="用户积分"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">用户头像</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.userphoto" placeholder="用户头像"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">账号状态</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.userstatus" placeholder="账号状态"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">用户历史消费积分</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.usertotalscore" placeholder="用户历史消费积分"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">京东pid</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.jdpid" placeholder="京东pid"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">拼多多pid</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.pddpid" placeholder="拼多多pid"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">淘宝pid</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.tbpid" placeholder="淘宝pid"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">唯品会pid</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.wphpid" placeholder="唯品会pid"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label">手机</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.userphone" placeholder="手机"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">身份</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.roleid" placeholder="身份"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">佣金比率</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.score" placeholder="佣金比率"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">微信openid</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.wxopenid" placeholder="微信openid"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">状态</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" v-model="userinfo.status" placeholder="状态"/>
+				</div>
+			</div>
+			<div class="form-group">
 				<label class="col-sm-2 control-label"></label>
 				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
 				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>

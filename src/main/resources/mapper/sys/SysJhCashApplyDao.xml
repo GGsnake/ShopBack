@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.sbed.modules.sys.dao.SysJhCashApplyDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.sbed.modules.sys.entity.SysJhCashApply" id="jhCashApplyMap">
+        <result property="id" column="id"/>
+        <result property="userid" column="userId"/>
+        <result property="money" column="money"/>
+        <result property="audit" column="audit"/>
+        <result property="name" column="name"/>
+        <result property="account" column="account"/>
+        <result property="status" column="status"/>
+        <result property="createtime" column="createTime"/>
+        <result property="updatetime" column="updateTime"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysJhCashApply">
+		select * from jh_cash_apply where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysJhCashApply">
+		select * from jh_cash_apply
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from jh_cash_apply 
+	</select>
+	 
+	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysJhCashApply" useGeneratedKeys="true" keyProperty="id">
+		insert into jh_cash_apply
+		(
+			`userId`, 
+			`money`, 
+			`audit`, 
+		 `createtime`
+		)
+		values
+		(
+			#{userid}, 
+			#{money}, 
+			0,
+			now()
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.sbed.modules.sys.entity.SysJhCashApply">
+		update jh_cash_apply 
+		<set>
+			<if test="userid != null">`userId` = #{userid}, </if>
+			<if test="money != null">`money` = #{money}, </if>
+			<if test="account != null">`account` = #{account}, </if>
+			<if test="audit != null">`audit` = #{audit}, </if>
+			`updateTime` =now()
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from jh_cash_apply where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from jh_cash_apply where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

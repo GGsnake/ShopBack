@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.sbed.modules.sys.dao.SysJhAdviceDevDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.sbed.modules.sys.entity.SysJhAdviceDev" id="jhAdviceDevMap">
+        <result property="id" column="id"/>
+        <result property="titile" column="titile"/>
+        <result property="content" column="content"/>
+        <result property="image" column="image"/>
+        <result property="contentImage" column="content_image"/>
+        <result property="createtime" column="createTime"/>
+        <result property="updatetime" column="updateTime"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysJhAdviceDev">
+		select * from jh_advice_dev where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysJhAdviceDev">
+		select * from jh_advice_dev
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+       </choose>
+<if test="offset != null and limit != null">
+limit #{offset}, #{limit}
+</if>
+		</select>
+
+<select id="queryTotal" resultType="int">
+		select count(*) from jh_advice_dev
+	</select>
+
+<insert id="save" parameterType="io.sbed.modules.sys.entity.SysJhAdviceDev" useGeneratedKeys="true" keyProperty="id">
+		insert into jh_advice_dev
+		(
+			`titile`, 
+			`content`, 
+			`content_image`,
+			`createTime`
+
+		)
+		values
+		(
+			#{titile}, 
+			#{content}, 
+			#{contentImage},
+			now()
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.sbed.modules.sys.entity.SysJhAdviceDev">
+		update jh_advice_dev 
+		<set>
+			<if test="titile != null">`titile` = #{titile}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="contentImage != null">`content_image` = #{contentImage}, </if>
+			`updateTime` = now()
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from jh_advice_dev where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from jh_advice_dev where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,5 +1,6 @@
 package io.sbed.modules.sys.service;
 
+import io.sbed.modules.sys.dto.SysUserinfoDto;
 import io.sbed.modules.sys.entity.SysUserinfo;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ public interface SysUserinfoService {
 	
 	SysUserinfo queryObject(Long id);
 	
-	List<SysUserinfo> queryList(Map<String, Object> map);
+	List<SysUserinfoDto> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);
 	

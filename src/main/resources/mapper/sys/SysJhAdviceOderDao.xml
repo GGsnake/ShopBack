@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.sbed.modules.sys.dao.SysJhAdviceOderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.sbed.modules.sys.entity.SysJhAdviceOder" id="jhAdviceOderMap">
+        <result property="id" column="id"/>
+        <result property="userid" column="userId"/>
+        <result property="odersn" column="oderSn"/>
+        <result property="src" column="src"/>
+        <result property="srcName" column="src_name"/>
+        <result property="name" column="name"/>
+        <result property="pid" column="pid"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="orderStatusDesc" column="order_status_desc"/>
+        <result property="oderCreatetime" column="oder_createTime"/>
+        <result property="createtime" column="createTime"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysJhAdviceOder">
+		select * from jh_advice_oder where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysJhAdviceOder">
+		select * from jh_advice_oder
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from jh_advice_oder 
+	</select>
+	 
+	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysJhAdviceOder" useGeneratedKeys="true" keyProperty="id">
+		insert into jh_advice_oder
+		(
+			`userId`, 
+			`oderSn`, 
+			`src`, 
+			`src_name`, 
+			`name`, 
+			`pid`, 
+			`order_status`, 
+			`order_status_desc`, 
+			`oder_createTime`, 
+			`createTime`
+		)
+		values
+		(
+			#{userid}, 
+			#{odersn}, 
+			#{src}, 
+			#{srcName}, 
+			#{name}, 
+			#{pid}, 
+			#{orderStatus}, 
+			#{orderStatusDesc}, 
+			#{oderCreatetime}, 
+			#{createtime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.sbed.modules.sys.entity.SysJhAdviceOder">
+		update jh_advice_oder 
+		<set>
+			<if test="userid != null">`userId` = #{userid}, </if>
+			<if test="odersn != null">`oderSn` = #{odersn}, </if>
+			<if test="src != null">`src` = #{src}, </if>
+			<if test="srcName != null">`src_name` = #{srcName}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="pid != null">`pid` = #{pid}, </if>
+			<if test="orderStatus != null">`order_status` = #{orderStatus}, </if>
+			<if test="orderStatusDesc != null">`order_status_desc` = #{orderStatusDesc}, </if>
+			<if test="oderCreatetime != null">`oder_createTime` = #{oderCreatetime}, </if>
+			<if test="createtime != null">`createTime` = #{createtime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from jh_advice_oder where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from jh_advice_oder where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

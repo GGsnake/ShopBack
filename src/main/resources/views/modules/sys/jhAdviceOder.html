@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>订单通知表</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../../css/font-awesome.min.css">
+<link rel="stylesheet" href="../../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../../css/main.css">
+<script src="../../../libs/jquery.min.js"></script>
+<script src="../../../plugins/layer/layer.js"></script>
+<script src="../../../libs/bootstrap.min.js"></script>
+<script src="../../../libs/vue.min.js"></script>
+<script src="../../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../../js/common.js"></script>
+</head>
+<body>
+<div id="rapp" v-cloak>
+	<div v-show="showList">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                功能操作
+            </div>
+            <div class="panel-body">
+				<div class="row">
+					<a class="btn btn-default" @click="refresh">刷新</a>
+
+					<a v-if="hasPermission('sys:jhAdviceOder:save')" class="btn btn-success" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+					<a v-if="hasPermission('sys:jhAdviceOder:update')" class="btn btn-warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+					<a v-if="hasPermission('sys:jhAdviceOder:delete')" class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+				</div>
+			</div>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+											<div class="form-group">
+			   	<label class="col-sm-2 control-label">用户id</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jhAdviceOder.userid" placeholder="用户id"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">订单编号</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jhAdviceOder.odersn" placeholder="订单编号"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">平台类型</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jhAdviceOder.src" placeholder="平台类型"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">平台名称</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jhAdviceOder.srcName" placeholder="平台名称"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">订单标题</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jhAdviceOder.name" placeholder="订单标题"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">推广位</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jhAdviceOder.pid" placeholder="推广位"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">订单状态</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jhAdviceOder.orderStatus" placeholder="订单状态"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">订单状态描述</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jhAdviceOder.orderStatusDesc" placeholder="订单状态描述"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">订单的创建时间</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jhAdviceOder.oderCreatetime" placeholder="订单的创建时间"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">创建时间</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jhAdviceOder.createtime" placeholder="创建时间"/>
+			    </div>
+			</div>
+							<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="../../../js/modules/sys/jhAdviceOder.js"></script>
+</body>
+</html>

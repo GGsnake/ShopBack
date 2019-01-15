@@ -1,22 +1,16 @@
 package io.sbed.modules.sys.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import io.sbed.modules.sys.dto.pidJdReq;
-import io.sbed.modules.sys.service.EveryGoodService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import io.sbed.modules.sys.entity.SysPidtb;
-import io.sbed.modules.sys.service.SysPidtbService;
 import io.sbed.common.utils.PageUtils;
 import io.sbed.common.utils.Query;
 import io.sbed.common.utils.Result;
+import io.sbed.modules.sys.entity.SysPidtb;
+import io.sbed.modules.sys.service.SysPidtbService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author heguoliang
@@ -24,13 +18,11 @@ import io.sbed.common.utils.Result;
  * @date 2018-12-30 16:48:00
  */
 @RestController
-@RequestMapping("/sys/pidtb")
-public class SysPidtbController extends AbstractController{
+@RequestMapping("/sys/pidjd")
+public class SysPidjdController extends AbstractController{
 
 	@Autowired
 	private SysPidtbService pidtbService;
-	@Autowired
-	private EveryGoodService everyGoodService;
 	
 	/**
 	 * 列表
@@ -66,8 +58,8 @@ public class SysPidtbController extends AbstractController{
 	 */
 	@RequestMapping("/save")
 	@RequiresPermissions("sys:pidtb:save")
-	public Result save(@RequestBody pidJdReq pidJdReq){
-		everyGoodService.createJdPid(pidJdReq.getCount());
+	public Result save(@RequestBody SysPidtb pidtb){
+		pidtbService.save(pidtb);
 		
 		return Result.ok();
 	}

@@ -3,57 +3,70 @@ package io.sbed.modules.sys.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jd.open.api.sdk.DefaultJdClient;
+import com.jd.open.api.sdk.JdClient;
+import com.jd.open.api.sdk.JdException;
 import com.zyqhw.springboot.util.PageParam;
 import io.sbed.modules.api.utils.PddSignUtil;
+import io.sbed.modules.sys.dao.SysPidjdDao;
 import io.sbed.modules.sys.entity.Goods_list;
 import io.sbed.modules.sys.entity.PddGood;
 import io.sbed.modules.sys.service.EveryGoodService;
 import io.sbed.modules.sys.util.HttpRequest;
+import io.sbed.modules.sys.util.NetUtils;
+import jd.union.open.position.create.request.PositionReq;
+import jd.union.open.position.create.request.UnionOpenPositionCreateRequest;
+import jd.union.open.position.create.response.UnionOpenPositionCreateResponse;
+import jd.union.open.user.pid.get.request.PidReq;
+import jd.union.open.user.pid.get.request.UnionOpenUserPidGetRequest;
+import jd.union.open.user.pid.get.response.UnionOpenUserPidGetResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 
 /**
  * Created by liujupeng on 2018/11/2.
  */
 @Service("everyGoodService")
-public class EveryGoodServiceImpl  implements EveryGoodService {
-    static  final  String REFRESH_TOKEN="75412af6-b87e-4279-81fd-0507c52dfb26";
-    static  final  String TIME="1541039628602";
-    static  final  String ACCESS_TOKEN="ed69acd6-dbc7-4fc5-a830-135e63d19692";
-    static  final  String MyappKey="D4236C4D973B80F70F8B8929E2C226CB";
-    static  final  String MyappSecret="2d0d4a0563e543dab280774a8b946db3";
-    static  final  String URL="https://api.jd.com/routerjson";
+public class EveryGoodServiceImpl implements EveryGoodService {
+    static final String REFRESH_TOKEN = "75412af6-b87e-4279-81fd-0507c52dfb26";
+    static final String TIME = "1541039628602";
+    static final String ACCESS_TOKEN = "ed69acd6-dbc7-4fc5-a830-135e63d19692";
+    static final String MyappKey = "D4236C4D973B80F70F8B8929E2C226CB";
+    static final String MyappSecret = "2d0d4a0563e543dab280774a8b946db3";
+    static final String URL = "https://api.jd.com/routerjson";
 
-    static  final  String CLIENTID="bbc1737d63e44e278dbffa9e96a7eca3";
-    static  final  String SECRET="5e1a03eb561bac0c63c5efc8c1472119fc3ad405";
+    static final String CLIENTID = "bbc1737d63e44e278dbffa9e96a7eca3";
+    static final String SECRET = "5e1a03eb561bac0c63c5efc8c1472119fc3ad405";
+
+    @Autowired
+    RestTemplate restTemplate;
     /**
-     *
      * @param pageParam
      */
     @Override
     public List<PddGood> queryPddGoods(PageParam pageParam, Integer sort_type, String keyword) {
-        String type="pdd.ddk.goods.search";
+        String type = "pdd.ddk.goods.search";
 
-        String timestamp = String.valueOf(System.currentTimeMillis()/1000);
+        String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
         //生成sign
-        String sign=SECRET+"client_id"+CLIENTID+"data_typeJSONpage"+pageParam.getPageNo()+"page_size"+pageParam.getPageSize()+"sort_type"+sort_type+"timestamp"
-                +timestamp+"type"+type+"with_coupontrue"+SECRET;
-        String  s= PddSignUtil.pddSign(sign);
-        SortedMap<String,String> mapsign=new TreeMap<>();
-        mapsign.put("client_id",CLIENTID);
-        mapsign.put("type",type);
-        mapsign.put("timestamp",timestamp);
-        mapsign.put("data_type","JSON");
-        mapsign.put("sign",s.toUpperCase());
+        String sign = SECRET + "client_id" + CLIENTID + "data_typeJSONpage" + pageParam.getPageNo() + "page_size" + pageParam.getPageSize() + "sort_type" + sort_type + "timestamp"
+                + timestamp + "type" + type + "with_coupontrue" + SECRET;
+        String s = PddSignUtil.pddSign(sign);
+        SortedMap<String, String> mapsign = new TreeMap<>();
+        mapsign.put("client_id", CLIENTID);
+        mapsign.put("type", type);
+        mapsign.put("timestamp", timestamp);
+        mapsign.put("data_type", "JSON");
+        mapsign.put("sign", s.toUpperCase());
         mapsign.put("sort_type", String.valueOf(sort_type));
         mapsign.put("page", String.valueOf(pageParam.getPageNo()));
         mapsign.put("page_size", String.valueOf(pageParam.getPageSize()));
-        mapsign.put("with_coupon","true");
+        mapsign.put("with_coupon", "true");
         String res = null;
         try {
             res = HttpRequest.sendPost("https://gw-api.pinduoduo.com/api/router", mapsign);
@@ -63,10 +76,9 @@ public class EveryGoodServiceImpl  implements EveryGoodService {
 
         JSONArray goods_list = JSON.parseObject(res).getJSONObject("goods_search_response").getJSONArray("goods_list");
         List<Goods_list> goodsize = JSONObject.parseArray(goods_list.toJSONString(), Goods_list.class);
-        List<PddGood> pddsize=new ArrayList<>();
-        for (Goods_list goodsList:goodsize)
-        {
-            PddGood pd=new PddGood();
+        List<PddGood> pddsize = new ArrayList<>();
+        for (Goods_list goodsList : goodsize) {
+            PddGood pd = new PddGood();
             pd.setGoods_id(goodsList.getGoods_id());
             pd.setCoupon_discount(goodsList.getCoupon_discount());
             pd.setMall_name(goodsList.getMall_name());
@@ -85,6 +97,82 @@ public class EveryGoodServiceImpl  implements EveryGoodService {
 
     }
 
+    @Autowired
+    private SysPidjdDao sysPidjdDao;
+
+    @Override
+    public JSONObject createJdPid(Integer count) {
+        final String URL = "http://jdapi.apptimes.cn/";
+
+//        String SERVER_URL = "https://router.jd.com/api";
+//        String appKey = "1b2eadd4ad604021a9e48aa5726c503b";
+//        String appSecret = "909a02d9f2e845578f6333a3a13ea5cd";
+//        String accessToken = "";
+//        JdClient client = new DefaultJdClient(SERVER_URL, accessToken, appKey, appSecret);
+        String jdurl = URL + "conponitems?";
+        JSONObject temp = new JSONObject();
+        Map<String, String> urlSign = new HashMap<>();
+        JSONObject da = new JSONObject();
+        List pidList = new ArrayList();
+        urlSign.put("pidName", "lxtest7a,lxtest8a,lxtest9a");
+        urlSign.put("unionid", "1001142862");
+        urlSign.put("siteid", "1615700699");
+        urlSign.put("type", "2");
+        urlSign.put("authkey", "ece3b6ab1c8b87a7c8865dfe7ac1999750ff2bd682777ce215713a3922b0e6a3d6c05372abf1a06c");
+        String linkStringByGet = null;
+        try {
+            linkStringByGet = NetUtils.createLinkStringByGet(urlSign);
+            JSONObject jsonObject ;
+            String res = restTemplate.getForObject(jdurl + linkStringByGet, String.class);
+            jsonObject = (JSONObject) JSON.parseObject(res);
+            System.out.println(jsonObject);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        for (int i = 1; i < count; i++) {
+//            UnionOpenUserPidGetRequest unionOpenUserPidGetRequest = new UnionOpenUserPidGetRequest();
+//            PidReq pidReq = new PidReq();
+//            pidReq.setUnionId();
+//            pidReq.setChildUnionId(1615700699l);
+//            pidReq.setPromotionType(1);
+//            unionOpenUserPidGetRequest.setPidReq(pidReq);
+//            try {
+//                UnionOpenUserPidGetResponse response = client.execute(unionOpenUserPidGetRequest);
+//
+//            } catch (JdException e) {
+//                e.printStackTrace();
+//            }
+
+
+//            UnionOpenPositionCreateRequest request = new UnionOpenPositionCreateRequest();
+//            PositionReq positionReq = new PositionReq();
+//            positionReq.setSpaceNameList(new String[]{"lxtest7a", "lxtest8a", "lxtest9a"});
+//            positionReq.setUnionId(1001142862l);
+//            positionReq.setType(4);
+//            positionReq.setUnionType(1);
+//            positionReq.setSiteId(1615700699l);
+//            positionReq.setKey("ece3b6ab1c8b87a7c8865dfe7ac1999750ff2bd682777ce215713a3922b0e6a3d6c05372abf1a06c");
+//
+//            request.setPositionReq(positionReq);
+//            try {
+//                UnionOpenPositionCreateResponse response = client.execute(request);
+//                pidList.add(response.getData().getResultList());
+//            } catch (JdException e) {
+//                e.printStackTrace();
+//            }
+//        }
+            String das = (String) pidList.get(0);
+//
+//        for (int i = 0; i < pidList.size(); i++) {
+//            sysPidjdDao.addPidJd(1l);
+//        }
+
+//        da.put("data", response.getData());
+//        return da;
+
+            return null;
+        }
+
 //    @Override
 //    public void queryJdGoods(PageParam pageParam, Integer sort_type, String keyword) {
 //        //创建请求
@@ -98,6 +186,6 @@ public class EveryGoodServiceImpl  implements EveryGoodService {
 //            e.printStackTrace();
 //        }
 //    }
-
-
+return null;
+    }
 }

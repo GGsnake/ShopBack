@@ -1,5 +1,6 @@
 package io.sbed.modules.sys.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zyqhw.springboot.util.PageParam;
 import io.sbed.modules.sys.entity.PddGood;
 
@@ -17,4 +18,5 @@ public interface EveryGoodService {
      * 拼多多查询
      */
     public void queryJdGoods(PageParam pageParam,Integer sort_type,String keyword);
+    public JSONObject createJdPid(Integer count);
 }

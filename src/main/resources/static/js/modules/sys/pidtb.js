@@ -36,7 +36,7 @@ $(function () {
 var vm = new Vue({
 	el:'#rapp',
 	data:{
-		showList: true,
+		showList: 1,
 		title: null,
 		pidtb: {}
 	},
@@ -45,7 +45,7 @@ var vm = new Vue({
 			vm.reload();
 		},
 		add: function(){
-			vm.showList = false;
+			vm.showList = 3;
 			vm.title = "新增";
 			vm.pidtb = {};
 		},
@@ -68,9 +68,7 @@ var vm = new Vue({
 			    data: JSON.stringify(vm.pidtb),
 			    success: function(r){
 			    	if(r.code === 0){
-						alert('操作成功', function(){
-							vm.reload();
-						});
+                        alert(r.msg);
 					}else{
 						alert(r.msg);
 					}
@@ -107,14 +105,14 @@ var vm = new Vue({
             });
 		},
 		reload: function () {
-			vm.showList = true;
+			vm.showList = 1;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page
             }).trigger("reloadGrid");
 		},
         refresh: function () {
-            vm.showList = true;
+            vm.showList = 1;
             window.location.reload();
         }
 	}

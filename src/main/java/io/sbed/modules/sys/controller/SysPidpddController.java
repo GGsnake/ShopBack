@@ -2,6 +2,9 @@ package io.sbed.modules.sys.controller;
 
 import java.util.List;
 import java.util.Map;
+
+import io.sbed.modules.sys.dto.PidJdReq;
+import io.sbed.modules.sys.service.EveryGoodService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +29,8 @@ public class SysPidpddController extends AbstractController{
 
 	@Autowired
 	private SysPidpddService pidpddService;
+	@Autowired
+	private EveryGoodService everyGoodService;
 	
 	/**
 	 * 列表
@@ -61,9 +66,8 @@ public class SysPidpddController extends AbstractController{
 	 */
 	@RequestMapping("/save")
 	@RequiresPermissions("sys:pidpdd:save")
-	public Result save(@RequestBody SysPidpdd pidpdd){
-		pidpddService.save(pidpdd);
-		
+	public Result save(@RequestBody PidJdReq pidpdd){
+		everyGoodService.createPddPid(pidpdd.getCount());
 		return Result.ok();
 	}
 	

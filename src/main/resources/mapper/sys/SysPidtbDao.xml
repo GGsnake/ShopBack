@@ -9,11 +9,11 @@
     </resultMap>
 
 	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysPidtb">
-		select * from pidtb where id = #{value}
+		select * from jh_pid_tb where id = #{value}
 	</select>
 
 	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysPidtb">
-		select * from pidtb
+		select * from jh_pid_tb
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -28,11 +28,11 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from pidtb 
+		select count(*) from jh_pid_tb
 	</select>
 	 
 	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysPidtb" useGeneratedKeys="true" keyProperty="id">
-		insert into pidtb
+		insert into jh_pid_tb
 		(
 			`pid`
 		)
@@ -43,7 +43,7 @@
 	</insert>
 	 
 	<update id="update" parameterType="io.sbed.modules.sys.entity.SysPidtb">
-		update pidtb 
+		update jh_pid_tb
 		<set>
 			<if test="pid != null">`pid` = #{pid}</if>
 		</set>
@@ -51,11 +51,11 @@
 	</update>
 	
 	<delete id="delete">
-		delete from pidtb where id = #{value}
+		delete from jh_pid_tb where id = #{value}
 	</delete>
 	
 	<delete id="deleteBatch">
-		delete from pidtb where id in 
+		delete from jh_pid_tb where id in
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>

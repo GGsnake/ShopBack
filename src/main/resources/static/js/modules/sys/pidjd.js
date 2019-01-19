@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/pidpdd/list',
+        url: baseURL + 'sys/pidjd/list',
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
@@ -38,16 +38,16 @@ var vm = new Vue({
 	data:{
 		showList: 1,
 		title: null,
-		pidpdd: {}
+		pidjd: {}
 	},
 	methods: {
 		query: function () {
 			vm.reload();
 		},
 		add: function(){
-			vm.showList = 3;
+			vm.showList =3;
 			vm.title = "新增";
-			vm.pidpdd = {};
+			vm.pidjd = {};
 		},
 		update: function () {
 			var id = getSelectedRow();
@@ -60,12 +60,12 @@ var vm = new Vue({
             vm.getInfo(id)
 		},
 		saveOrUpdate: function () {
-			var url = vm.pidpdd.id == null ? "sys/pidpdd/save" : "sys/pidpdd/update";
+			var url = vm.pidjd.id == null ? "sys/pidjd/save" : "sys/pidjd/update";
 			$.ajax({
 				type: "POST",
 			    url: baseURL + url,
                 contentType: "application/json",
-			    data: JSON.stringify(vm.pidpdd),
+			    data: JSON.stringify(vm.pidjd),
 			    success: function(r){
 			    	if(r.code === 0){
 						alert('操作成功', function(){
@@ -86,7 +86,7 @@ var vm = new Vue({
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
-				    url: baseURL + "sys/pidpdd/delete",
+				    url: baseURL + "sys/pidjd/delete",
                     contentType: "application/json",
 				    data: JSON.stringify(ids),
 				    success: function(r){
@@ -102,8 +102,8 @@ var vm = new Vue({
 			});
 		},
 		getInfo: function(id){
-			$.get(baseURL + "sys/pidpdd/info/"+id, function(r){
-                vm.pidpdd = r.pidpdd;
+			$.get(baseURL + "sys/pidjd/info/"+id, function(r){
+                vm.pidjd = r.pidjd;
             });
 		},
 		reload: function () {

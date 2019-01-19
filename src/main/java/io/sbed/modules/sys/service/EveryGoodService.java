@@ -18,5 +18,23 @@ public interface EveryGoodService {
      * 拼多多查询
      */
     public void queryJdGoods(PageParam pageParam,Integer sort_type,String keyword);
+
+    /**
+     * 创建京东推广位
+     * @param count
+     * @return
+     */
     public JSONObject createJdPid(Integer count);
+    /**
+     * 创建淘宝推广位
+     * @param count
+     * @return
+     */
+    public JSONObject createTbPid(Integer count);
+    /**
+     * 创建拼多多推广位
+     * @param count
+     * @return
+     */
+    public JSONObject createPddPid(Integer count);
 }

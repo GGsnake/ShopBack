@@ -6,7 +6,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.jd.open.api.sdk.DefaultJdClient;
 import com.jd.open.api.sdk.JdClient;
 import com.jd.open.api.sdk.JdException;
+import com.pdd.pop.sdk.common.util.JsonUtil;
+import com.pdd.pop.sdk.http.PopClient;
+import com.pdd.pop.sdk.http.PopHttpClient;
+import com.pdd.pop.sdk.http.api.request.PddDdkGoodsPidGenerateRequest;
+import com.pdd.pop.sdk.http.api.response.PddDdkGoodsPidGenerateResponse;
+import com.zyqhw.springboot.util.GetDayUtils;
 import com.zyqhw.springboot.util.PageParam;
+import io.sbed.common.utils.RandomUtils;
 import io.sbed.modules.api.utils.PddSignUtil;
 import io.sbed.modules.sys.dao.SysPidjdDao;
 import io.sbed.modules.sys.entity.Goods_list;
@@ -20,7 +27,9 @@ import jd.union.open.position.create.response.UnionOpenPositionCreateResponse;
 import jd.union.open.user.pid.get.request.PidReq;
 import jd.union.open.user.pid.get.request.UnionOpenUserPidGetRequest;
 import jd.union.open.user.pid.get.response.UnionOpenUserPidGetResponse;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,6 +40,7 @@ import java.util.*;
 /**
  * Created by liujupeng on 2018/11/2.
  */
+@Log
 @Service("everyGoodService")
 public class EveryGoodServiceImpl implements EveryGoodService {
     static final String REFRESH_TOKEN = "75412af6-b87e-4279-81fd-0507c52dfb26";
@@ -43,8 +53,17 @@ public class EveryGoodServiceImpl implements EveryGoodService {
     static final String CLIENTID = "bbc1737d63e44e278dbffa9e96a7eca3";
     static final String SECRET = "5e1a03eb561bac0c63c5efc8c1472119fc3ad405";
 
+    @Value("${pdd_pro.pdd-key}")
+    private String PDD_KEY;
+    @Value("${pdd_pro.pdd-secret}")
+    private String PDD_SECRET;
+    @Value("${pdd_pro.pdd-access_token}")
+    private String PDD_ACCESS_TOKEN;
+    @Value("${pdd_pro.pdd-router-url}")
+    private String PDD_URL;
     @Autowired
     RestTemplate restTemplate;
+
     /**
      * @param pageParam
      */
@@ -109,12 +128,17 @@ public class EveryGoodServiceImpl implements EveryGoodService {
 //        String appSecret = "909a02d9f2e845578f6333a3a13ea5cd";
 //        String accessToken = "";
 //        JdClient client = new DefaultJdClient(SERVER_URL, accessToken, appKey, appSecret);
-        String jdurl = URL + "conponitems?";
+        String jdurl = URL + "addpid?";
         JSONObject temp = new JSONObject();
         Map<String, String> urlSign = new HashMap<>();
         JSONObject da = new JSONObject();
-        List pidList = new ArrayList();
-        urlSign.put("pidName", "lxtest7a,lxtest8a,lxtest9a");
+        List<Long> pidList = new ArrayList();
+        StringBuilder pid = new StringBuilder();
+
+        for (int i = 1; i < count; i++) {
+            pid.append(RandomUtils.randomSixNum() + ",");
+        }
+        urlSign.put("pidname", pid.substring(0, pid.length() - 1));
         urlSign.put("unionid", "1001142862");
         urlSign.put("siteid", "1615700699");
         urlSign.put("type", "2");
@@ -122,14 +146,24 @@ public class EveryGoodServiceImpl implements EveryGoodService {
         String linkStringByGet = null;
         try {
             linkStringByGet = NetUtils.createLinkStringByGet(urlSign);
-            JSONObject jsonObject ;
+            JSONObject data;
             String res = restTemplate.getForObject(jdurl + linkStringByGet, String.class);
-            jsonObject = (JSONObject) JSON.parseObject(res);
-            System.out.println(jsonObject);
+            data = JSON.parseObject(res);
+            Map data1 = data.getJSONObject("data").getObject("resultList", JSONObject.class);
+            data1.forEach((k, v) -> {
+                String s = v.toString();
+                pidList.add(Long.valueOf(s));
+            });
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        for (int i = 1; i < count; i++) {
+
+        pidList.forEach(item->{
+            Integer var =  sysPidjdDao.addPidJd(item);
+            if (var == 0) {
+                log.warning("pid插入到数据库失败 PID===" + item);
+            }
+        });
 //            UnionOpenUserPidGetRequest unionOpenUserPidGetRequest = new UnionOpenUserPidGetRequest();
 //            PidReq pidReq = new PidReq();
 //            pidReq.setUnionId();
@@ -161,7 +195,6 @@ public class EveryGoodServiceImpl implements EveryGoodService {
 //                e.printStackTrace();
 //            }
 //        }
-            String das = (String) pidList.get(0);
 //
 //        for (int i = 0; i < pidList.size(); i++) {
 //            sysPidjdDao.addPidJd(1l);
@@ -170,8 +203,46 @@ public class EveryGoodServiceImpl implements EveryGoodService {
 //        da.put("data", response.getData());
 //        return da;
 
+        return null;
+    }
+
+    @Override
+    public JSONObject createTbPid(Integer count) {
+        return null;
+    }
+
+
+    @Override
+    public JSONObject createPddPid(Integer count) {
+        List<String> pid = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            pid.add(""+RandomUtils.randomSixNum());
+        }
+        PopClient client = new PopHttpClient(PDD_KEY, PDD_SECRET);
+
+        PddDdkGoodsPidGenerateRequest request = new PddDdkGoodsPidGenerateRequest();
+        request.setNumber(Long.valueOf(pid.size()));
+        request.setPIdNameList(pid);
+
+        PddDdkGoodsPidGenerateResponse response = null;
+        try {
+            response = client.syncInvoke(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        List<PddDdkGoodsPidGenerateResponse.PIdListItem> pIdList = response.getPIdGenerateResponse().getPIdList();
+        if (pIdList == null || pIdList.size() == 0) {
             return null;
         }
+
+        pIdList.forEach(item->{
+            Integer var =  sysPidjdDao.addPidPdd(item.getPId());
+            if (var == 0) {
+                log.warning("pid插入到数据库失败 PID===" +item.getPId());
+            }
+        });
+        return null;
+    }
 
 //    @Override
 //    public void queryJdGoods(PageParam pageParam, Integer sort_type, String keyword) {
@@ -186,6 +257,6 @@ public class EveryGoodServiceImpl implements EveryGoodService {
 //            e.printStackTrace();
 //        }
 //    }
-return null;
-    }
+
+
 }

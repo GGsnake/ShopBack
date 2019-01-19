@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.sbed.modules.sys.dao.SysPidpddDao">
+<mapper namespace="io.sbed.modules.sys.dao.SysPidjdDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="io.sbed.modules.sys.entity.SysPidpdd" id="pidpddMap">
+    <resultMap type="io.sbed.modules.sys.entity.SysPidjd" id="pidjdMap">
         <result property="id" column="id"/>
         <result property="pid" column="pid"/>
     </resultMap>
 
-	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysPidpdd">
-		select * from jh_pid_pdd where id = #{value}
+	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysPidjd">
+		select * from jh_pid_jd where id = #{value}
 	</select>
 
-	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysPidpdd">
-		select * from jh_pid_pdd
+	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysPidjd">
+		select * from jh_pid_jd
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -28,11 +28,11 @@
 	</select>
 
  	<select id="queryTotal" resultType="int">
-		select count(*) from jh_pid_pdd
+		select count(*) from jh_pid_jd
 	</select>
 
-	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysPidpdd" useGeneratedKeys="true" keyProperty="id">
-		insert into jh_pid_pdd
+	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysPidjd" useGeneratedKeys="true" keyProperty="id">
+		insert into jh_pid_jd
 		(
 			`pid`
 		)
@@ -42,8 +42,8 @@
 		)
 	</insert>
 
-	<update id="update" parameterType="io.sbed.modules.sys.entity.SysPidpdd">
-		update jh_pid_pdd
+	<update id="update" parameterType="io.sbed.modules.sys.entity.SysPidjd">
+		update jh_pid_jd
 		<set>
 			<if test="pid != null">`pid` = #{pid}</if>
 		</set>
@@ -51,11 +51,11 @@
 	</update>
 
 	<delete id="delete">
-		delete from jh_pid_pdd where id = #{value}
+		delete from jh_pid_jd where id = #{value}
 	</delete>
 
 	<delete id="deleteBatch">
-		delete from jh_pid_pdd where id in
+		delete from jh_pid_jd where id in
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>

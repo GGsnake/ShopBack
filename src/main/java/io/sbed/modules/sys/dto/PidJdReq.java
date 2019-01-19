@@ -10,7 +10,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Getter
-public class pidJdReq {
+public class PidJdReq {
     private Integer count;
     private Integer id;
 }

@@ -3,7 +3,7 @@ package io.sbed.modules.sys.controller;
 import java.util.List;
 import java.util.Map;
 
-import io.sbed.modules.sys.dto.pidJdReq;
+import io.sbed.modules.sys.dto.PidJdReq;
 import io.sbed.modules.sys.service.EveryGoodService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class SysPidtbController extends AbstractController{
 	 */
 	@RequestMapping("/save")
 	@RequiresPermissions("sys:pidtb:save")
-	public Result save(@RequestBody pidJdReq pidJdReq){
+	public Result save(@RequestBody PidJdReq pidJdReq){
 		everyGoodService.createJdPid(pidJdReq.getCount());
 		
 		return Result.ok();

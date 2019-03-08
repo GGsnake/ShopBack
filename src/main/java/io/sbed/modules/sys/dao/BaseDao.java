@@ -34,6 +34,7 @@ public interface BaseDao<T> {
 	
 	int queryTotal(Map<String, Object> map);
 
+
 	int queryTotal();
 	
 	//导出数据

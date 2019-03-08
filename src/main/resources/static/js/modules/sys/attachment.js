@@ -76,7 +76,8 @@ var vm = new Vue({
 	data:{
 		q:{
 			title: null,
-            mime_type: ''
+            mime_type: '',
+            goodType:''
 		},
 		showList: true,
 		title: null,
@@ -111,7 +112,31 @@ var vm = new Vue({
             vm.getAttachment(id);
             openLayer('700px', '600px', '查看附件', 'attachmentInfoLayer');
         },
-		del: function () {
+        adds: function () {
+            var ids = getSelectedRows();
+            if(ids == null){
+                return ;
+            }
+		   var type=vm.q.goodType;
+            var c ={"id":ids,"type":type}
+            $.ajax({
+                type: "POST",
+                url: baseURL + "sys/attachment/adds",
+                contentType: "application/json",
+                data: JSON.stringify(c),
+                success: function(r){
+                    if(r.code == 0){
+                        alert('操作成功', function(){
+                            vm.reload();
+                        });
+                    }else{
+                        alert(r.msg);
+                    }
+                }
+            });
+        },
+
+        del: function () {
 			var ids = getSelectedRows();
 			if(ids == null){
 				return ;
@@ -142,7 +167,10 @@ var vm = new Vue({
                 page:page
             }).trigger("reloadGrid");
 		},
-        refresh: function () {
+
+
+
+            refresh: function () {
             vm.showList = true;
             window.location.reload();
         }

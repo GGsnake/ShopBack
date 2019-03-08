@@ -15,9 +15,12 @@ public interface SysUserinfoService {
 	SysUserinfo queryObject(Long id);
 	
 	List<SysUserinfoDto> queryList(Map<String, Object> map);
-	
+	List<SysUserinfoDto> queryTotalAgentList(Map<String, Object> map);
+
 	int queryTotal(Map<String, Object> map);
-	
+
+	int queryTotalAgent(Map<String, Object> map);
+
 	void save(SysUserinfo userinfo);
 	
 	void update(SysUserinfo userinfo);

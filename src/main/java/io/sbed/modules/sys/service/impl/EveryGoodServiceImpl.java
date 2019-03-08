@@ -135,14 +135,14 @@ public class EveryGoodServiceImpl implements EveryGoodService {
         List<Long> pidList = new ArrayList();
         StringBuilder pid = new StringBuilder();
 
-        for (int i = 1; i < count; i++) {
+        for (int i = 1; i < 50; i++) {
             pid.append(RandomUtils.randomSixNum() + ",");
         }
         urlSign.put("pidname", pid.substring(0, pid.length() - 1));
-        urlSign.put("unionid", "1001142862");
-        urlSign.put("siteid", "1615700699");
+        urlSign.put("unionid", "1001347399");
+        urlSign.put("siteid", "1695433914");
         urlSign.put("type", "2");
-        urlSign.put("authkey", "ece3b6ab1c8b87a7c8865dfe7ac1999750ff2bd682777ce215713a3922b0e6a3d6c05372abf1a06c");
+        urlSign.put("authkey", "ece3b6ab1c8b87a7234801d44a165894785e41d9bc5500e23b2d8e614afb4a03c89bc245270b7245");
         String linkStringByGet = null;
         try {
             linkStringByGet = NetUtils.createLinkStringByGet(urlSign);

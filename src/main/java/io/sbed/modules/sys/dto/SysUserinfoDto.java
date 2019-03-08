@@ -56,5 +56,7 @@ public class SysUserinfoDto {
     private String wxopenid;
     //状态
     private String status;
+    //状态
+    private String income;
 
 }

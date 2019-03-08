@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.sbed.modules.sys.dao.SysJhPayLogDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.sbed.modules.sys.entity.SysJhPayLog" id="jhPayLogMap">
+        <result property="id" column="id"/>
+        <result property="userid" column="userId"/>
+        <result property="ordersn" column="orderSn"/>
+        <result property="accept" column="accept"/>
+        <result property="createtime" column="createTime"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysJhPayLog">
+		select * from jh_pay_log where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysJhPayLog">
+		select * from jh_pay_log
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from jh_pay_log 
+	</select>
+	 
+	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysJhPayLog" useGeneratedKeys="true" keyProperty="id">
+		insert into jh_pay_log
+		(
+			`userId`, 
+			`orderSn`, 
+			`accept`, 
+			`createTime`
+		)
+		values
+		(
+			#{userid}, 
+			#{ordersn}, 
+			#{accept}, 
+			#{createtime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.sbed.modules.sys.entity.SysJhPayLog">
+		update jh_pay_log 
+		<set>
+			<if test="userid != null">`userId` = #{userid}, </if>
+			<if test="ordersn != null">`orderSn` = #{ordersn}, </if>
+			<if test="accept != null">`accept` = #{accept}, </if>
+			<if test="createtime != null">`createTime` = #{createtime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from jh_pay_log where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from jh_pay_log where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

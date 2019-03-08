@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>京东订单表</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../../css/font-awesome.min.css">
+<link rel="stylesheet" href="../../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../../css/main.css">
+<script src="../../../libs/jquery.min.js"></script>
+<script src="../../../plugins/layer/layer.js"></script>
+<script src="../../../libs/bootstrap.min.js"></script>
+<script src="../../../libs/vue.min.js"></script>
+<script src="../../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../../js/common.js"></script>
+</head>
+<body>
+<div id="rapp" v-cloak>
+	<div v-show="showList">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                功能操作
+            </div>
+            <div class="panel-body">
+				<div class="row">
+					<a class="btn btn-default" @click="refresh">刷新</a>
+
+					<a v-if="hasPermission('sys:jdoder:save')" class="btn btn-success" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+					<a v-if="hasPermission('sys:jdoder:update')" class="btn btn-warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+					<a v-if="hasPermission('sys:jdoder:delete')" class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+				</div>
+			</div>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+											<div class="form-group">
+			   	<label class="col-sm-2 control-label">京东pid</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.positionid" placeholder="京东pid"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">1</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.actualcosprice" placeholder="1"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">推客获得的实际佣金</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.actualfee" placeholder="推客获得的实际佣金"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">佣金比例</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.commissionrate" placeholder="佣金比例"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">预估计佣金额</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.estimatecosprice" placeholder="预估计佣金额"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">推客的预估佣金额</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.estimatefee" placeholder="推客的预估佣金额"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">最终比例</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.finalrate" placeholder="最终比例"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">商品单价</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.price" placeholder="商品单价"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">商品Id</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.skuid" placeholder="商品Id"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">商品名称</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.skuname" placeholder="商品名称"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">订单ID</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.orderid" placeholder="订单ID"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">结算时间</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.paymonth" placeholder="结算时间"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">订单完成时间</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.finishtime" placeholder="订单完成时间"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">下单时间</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.ordertime" placeholder="下单时间"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">15.待付款,16.已付款,17.已完成,18.已结算</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.validcode" placeholder="15.待付款,16.已付款,17.已完成,18.已结算"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">创建时间</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.createtime" placeholder="创建时间"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">修改时间</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.updatetime" placeholder="修改时间"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<label class="col-sm-2 control-label">结算状态</label>
+			   	<div class="col-sm-6">
+			      <input type="text" class="form-control" v-model="jdoder.settle" placeholder="结算状态"/>
+			    </div>
+			</div>
+							<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="../../../js/modules/sys/jdoder.js"></script>
+</body>
+</html>

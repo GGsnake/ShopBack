@@ -11,6 +11,7 @@
         <result property="name" column="name"/>
         <result property="account" column="account"/>
         <result property="status" column="status"/>
+        <result property="roleid" column="roleid"/>
         <result property="createtime" column="createTime"/>
         <result property="updatetime" column="updateTime"/>
     </resultMap>
@@ -33,9 +34,26 @@
 			limit #{offset}, #{limit}
 		</if>
 	</select>
+	<select id="queryAgentList" resultType="io.sbed.modules.sys.entity.SysJhCashApply">
+		select * from jh_cash_apply where roleid=1
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
 	
  	<select id="queryTotal" resultType="int">
 		select count(*) from jh_cash_apply 
+	</select>
+ 	<select id="queryAgentTotal" resultType="int">
+		select count(*) from jh_cash_apply  where roleid=1
 	</select>
 	 
 	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysJhCashApply" useGeneratedKeys="true" keyProperty="id">

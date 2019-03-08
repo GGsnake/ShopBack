@@ -7,7 +7,10 @@ import io.sbed.modules.sys.entity.User;
  */
 public interface UserService {
     String userLogin(User user);
+
     Boolean createUser(User user);
+
     User queryUserByPhone(User user);
 
 }
+

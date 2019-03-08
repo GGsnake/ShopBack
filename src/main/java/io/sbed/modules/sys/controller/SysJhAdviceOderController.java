@@ -2,6 +2,8 @@ package io.sbed.modules.sys.controller;
 
 import java.util.List;
 import java.util.Map;
+
+import io.sbed.modules.sys.util.ImgUploadUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,7 @@ import io.sbed.modules.sys.service.SysJhAdviceOderService;
 import io.sbed.common.utils.PageUtils;
 import io.sbed.common.utils.Query;
 import io.sbed.common.utils.Result;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author heguoliang
@@ -88,5 +91,7 @@ public class SysJhAdviceOderController extends AbstractController{
 		
 		return Result.ok();
 	}
-	
+
+
+
 }

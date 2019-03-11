@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/jhtaobaoall/hot',
+        url: baseURL + 'sys/jhtaobaoall/hot/4',
         datatype: "json",
         colModel: [
             {

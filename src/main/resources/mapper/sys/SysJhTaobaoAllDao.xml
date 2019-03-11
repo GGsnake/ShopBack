@@ -107,8 +107,50 @@
             </if>
         </where>
     </select>
+
+    <insert id="saveJd" useGeneratedKeys="true"
+            keyProperty="id">
+		insert ignore jh_jd_good
+		(
+			`pictUrl`,
+			`shopTitle`,
+			`jdurl`,
+			`title`,
+			`commissionRate`,
+			`coupon`,
+			`zkFinalPrice`,
+			`volume`,
+			`numIid`,
+			`status`,
+			`istamll`,
+			`commission`,
+			`createTime`,
+			`opt`,
+			`cid`
+		)	values
+		(
+			#{pictUrl},
+			#{shopTitle},
+			#{jdurl},
+			#{title},
+			#{commissionRate},
+			#{coupon},
+			#{zkFinalPrice},
+			#{volume},
+			#{numIid},
+			0,
+			#{istamll},
+			#{comssion},
+			now(),
+			#{opt},
+			#{cid}
+
+		)
+	</insert>
+
+
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-		insert into jh_taobao_all
+		insert ignore jh_taobao_all
 		(
 			`pictUrl`, 
 			`shopTitle`, 

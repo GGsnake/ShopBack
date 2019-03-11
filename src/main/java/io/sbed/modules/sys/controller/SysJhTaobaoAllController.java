@@ -43,33 +43,33 @@ public class SysJhTaobaoAllController extends AbstractController {
 		
 		return Result.ok().put("page", pageUtil);
 	}
+//	/**
+//	 * 列表
+//	 */
+//	@RequestMapping("/allList")
+////	@RequiresPermissions("sys:jhTaobaoAll:list")
+//	public Result alllist(@RequestParam Map<String, Object> params){
+//		//查询列表数据
+//        Query query = new Query(params);
+//        query.put("opt",0);
+//
+//		List<SysJhTaobaoAll> jhTaobaoAllList = jhTaobaoAllService.queryList(query);
+//		int total = jhTaobaoAllService.queryTotal(query);
+//
+//		PageUtils pageUtil = new PageUtils(jhTaobaoAllList, total, query.getLimit(), query.getPage());
+//
+//		return Result.ok().put("page", pageUtil);
+//	}
+
 	/**
 	 * 列表
 	 */
-	@RequestMapping("/allList")
+	@RequestMapping("/hot/{id}")
 //	@RequiresPermissions("sys:jhTaobaoAll:list")
-	public Result alllist(@RequestParam Map<String, Object> params){
+	public Result hot(@RequestParam Map<String, Object> params,@PathVariable Integer id){
 		//查询列表数据
         Query query = new Query(params);
-        query.put("opt",0);
-
-		List<SysJhTaobaoAll> jhTaobaoAllList = jhTaobaoAllService.queryList(query);
-		int total = jhTaobaoAllService.queryTotal(query);
-
-		PageUtils pageUtil = new PageUtils(jhTaobaoAllList, total, query.getLimit(), query.getPage());
-
-		return Result.ok().put("page", pageUtil);
-	}
-
-	/**
-	 * 列表
-	 */
-	@RequestMapping("/hot")
-//	@RequiresPermissions("sys:jhTaobaoAll:list")
-	public Result hot(@RequestParam Map<String, Object> params){
-		//查询列表数据
-        Query query = new Query(params);
-		query.put("opt",5);
+		query.put("opt",id);
 		List<SysJhTaobaoAll> jhTaobaoAllList = jhTaobaoAllService.queryList(query);
 		int total = jhTaobaoAllService.queryTotal(query);
 

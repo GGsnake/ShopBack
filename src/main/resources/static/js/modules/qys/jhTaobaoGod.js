@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/jhtaobaoall/allList',
+        url: baseURL + 'sys/jhtaobaoall/hot/6',
         datatype: "json",
         colModel: [
             {
@@ -87,110 +87,83 @@ $(function () {
 
         ],
         viewrecords: true,
-        height: "100%",
-        rowNum: 10,
-        rowList: [10, 30, 50],
-        rownumbers: true,
-        rownumWidth: 25,
-        autowidth: true,
-        multiselect: true,
-        pager: "#jqGridPager",
-        jsonReader: {
-            root: "page.list",
-            page: "page.currPage",
-            total: "page.totalPage",
-            records: "page.totalCount"
-        },
+        height:
+            "100%",
+        rowNum:
+            10,
+        rowList:
+            [10, 30, 50],
+        rownumbers:
+            true,
+        rownumWidth:
+            25,
+        autowidth:
+            true,
+        multiselect:
+            true,
+        pager:
+            "#jqGridPager",
+        jsonReader:
+            {
+                root: "page.list",
+                page:
+                    "page.currPage",
+                total:
+                    "page.totalPage",
+                records:
+                    "page.totalCount"
+            }
+        ,
         prmNames: {
             page: "page",
-            rows: "limit",
-            order: "order"
-        },
+            rows:
+                "limit",
+            order:
+                "order"
+        }
+        ,
         gridComplete: function () {
             //隐藏grid底部滚动条
             $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
         }
     });
-    //
-    // new AjaxUpload('#upload', {
-    //     action: baseURL + 'sys/attachment/upload?token=' + token,
-    //     name: 'file',
-    //     autoSubmit:true,
-    //     responseType:"json",
-    //     onSubmit:function(file, extension){
-    //         layer.load(2);
-    //         /*if (!(extension && /^(jpg|jpeg|png|gif)$/.test(extension.toLowerCase()))){
-    //             alert('只支持jpg、png、gif格式的图片！');
-    //             return false;
-    //         }*/
-    //     },
-    //     onComplete : function(file, r){
-    //         layer.closeAll('loading');
-    //         if(r.code == 0){
-    //             vm.reload();
-    //         }else{
-    //             alert(r.msg);
-    //         }
-    //     }
-    // });
-
 });
 
 var vm = new Vue({
     el: '#rapp',
     data: {
-        q: {
-            title: null,
-            mime_type: '',
-            goodType: ''
-        },
         showList: true,
         title: null,
-        attachment: {},
-        mimeType: 'image/jpeg',
-        uploadFileResource: uploadFileResource,
-        baseURL: baseURL
+        jhTaobaoAll: {}
     },
     methods: {
         query: function () {
             vm.reload();
         },
-        // download: function (){
-        //     var id = getSelectedRow();
-        //     if(id == null){
-        //         return ;
-        //     }
-        //     var url=baseURL + "sys/attachment/download/"+id+"?token="+token;
-        //     window.location.href=url;
-        // },
-        // getAttachment: function (attachmentId){
-        //     $.get(baseURL + "sys/attachment/info/"+attachmentId, function(r){
-        //         vm.attachment = r.attachment;
-        //         vm.mimeType = r.attachment.mimeType;
-        //     });
-        // },
-        info: function () {
+        add: function () {
+            vm.showList = false;
+            vm.title = "新增";
+            vm.jhTaobaoAll = {};
+        },
+        update: function () {
             var id = getSelectedRow();
             if (id == null) {
                 return;
             }
-            vm.getAttachment(id);
-            openLayer('700px', '600px', '查看附件', 'attachmentInfoLayer');
+            vm.showList = false;
+            vm.title = "修改";
+
+            vm.getInfo(id)
         },
-        adds: function () {
-            var ids = getSelectedRows();
-            if (ids == null) {
-                return;
-            }
-            var type = vm.q.goodType;
-            var data = {"ids": ids, "opt": type}
+        saveOrUpdate: function () {
+            var url = vm.jhTaobaoAll.id == null ? "sys/jhtaobaoall/save" : "sys/jhtaobaoall/update";
             $.ajax({
                 type: "POST",
-                url: baseURL + "sys/jhtaobaoall/addOpt",
+                url: baseURL + url,
                 contentType: "application/json",
-                data: JSON.stringify(data),
+                data: JSON.stringify(vm.jhTaobaoAll),
                 success: function (r) {
-                    if (r.code == 0) {
+                    if (r.code === 0) {
                         alert('操作成功', function () {
                             vm.reload();
                         });
@@ -206,10 +179,11 @@ var vm = new Vue({
             if (ids == null) {
                 return;
             }
+
             confirm('确定要删除选中的记录？', function () {
                 $.ajax({
                     type: "POST",
-                    url: baseURL + "sys/attachment/delete",
+                    url: baseURL + "sys/jhtaobaoall/delete",
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {
@@ -224,16 +198,19 @@ var vm = new Vue({
                 });
             });
         },
+        getInfo: function (id) {
+            $.get(baseURL + "sys/jhtaobaoall/info/" + id, function (r) {
+                vm.jhTaobaoAll = r.jhTaobaoAll;
+            });
+        },
+
         reload: function () {
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
-                postData: {'title': vm.q.title, 'mime_type': vm.q.mime_type},
                 page: page
             }).trigger("reloadGrid");
         },
-
-
         refresh: function () {
             vm.showList = true;
             window.location.reload();

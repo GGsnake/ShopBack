@@ -45,6 +45,22 @@ public class SysUserinfoController extends AbstractController{
 		
 		return Result.ok().put("page", pageUtil);
 	}
+	/**
+	 * 列表
+	 */
+	@RequestMapping("/agentlist")
+	@RequiresPermissions("sys:userinfo:list")
+	public Result agentlist(@RequestParam Map<String, Object> params){
+		//查询列表数据
+        Query query = new Query(params);
+
+		List<SysUserinfoDto> userinfoList = userinfoService.queryTotalAgentList(query);
+		int total = userinfoService.queryTotalAgent(query);
+
+		PageUtils pageUtil = new PageUtils(userinfoList, total, query.getLimit(), query.getPage());
+
+		return Result.ok().put("page", pageUtil);
+	}
 	
 	
 	/**

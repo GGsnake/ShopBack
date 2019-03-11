@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">    
+<mapper namespace="io.sbed.modules.sys.dao.SettingDao">
+	<!--<select id="queryObject" resultType="io.sbed.modules.sys.model.Config">-->
+		<!--select * from jh_config where id = #{id}-->
+	<!--</select>-->
+
+	<update id="update" parameterType="io.sbed.modules.sys.model.Config">
+		update jh_config
+		<set>
+			<if test="ConfigNo!= null">`ConfigNo` = #{ConfigNo}, </if>
+			<if test="ConfigName != null">`ConfigName` = #{ConfigName}, </if>
+			<if test="ConfigValue != null">`ConfigValue` = #{ConfigValue}, </if>
+			<if test="Remark != null">`Remark` = #{Remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<select id="queryListSetting" parameterType="map" resultType="io.sbed.modules.sys.model.Config">
+		select * from jh_config c
+		<where>
+			<if test="key != null and key != ''">
+				and c.`key` like concat('%',#{key},'%')
+			</if>
+		</where>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!---->
+	<!--<insert id="save" parameterType="io.sbed.modules.sys.entity.SysConfig">-->
+		<!--insert into sys_config(`key`, `value`, remark)-->
+			<!--values(#{key},#{value},#{remark})-->
+	<!--</insert>-->
+	<!---->
+	<!--<update id="update" parameterType="io.sbed.modules.sys.entity.SysConfig">-->
+		<!--update sys_config set `key` = #{key}, `value` = #{value}, remark = #{remark} -->
+			 <!--where id = #{id}-->
+	<!--</update>-->
+	<!---->
+	<!--&lt;!&ndash; 根据key，查询 &ndash;&gt;-->
+	<!--<select id="queryObjectByKey" parameterType="string" resultType="io.sbed.modules.sys.entity.SysConfig">-->
+		<!--select * from sys_config where `key` = #{key}-->
+	<!--</select>-->
+	<!---->
+	<!--<delete id="deleteBatch" parameterType="int">-->
+		<!--delete from sys_config where id in -->
+		<!--<foreach item="id" collection="array" open="(" separator="," close=")">-->
+			<!--#{id}-->
+		<!--</foreach>-->
+	<!--</delete>-->
+	
+</mapper>

@@ -24,6 +24,7 @@
         <result property="orderModifyAt" column="order_modify_at"/>
         <result property="updatetime" column="updateTime"/>
         <result property="status" column="status"/>
+        <result property="settle" column="settle"/>
     </resultMap>
 
 	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysOder">

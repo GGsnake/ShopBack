@@ -3,10 +3,31 @@ $(function () {
         url: baseURL + 'sys/jhcashapply/list',
         datatype: "json",
         colModel: [			
-			{ label: '用户id', name: 'userid', index: 'userId', width: 30 , key: true},
-			{ label: '提现金额', name: 'money', index: 'money', width: 40 },
-			{ label: '处理状态', name: 'audit', index: 'audit', width: 20 },
-			{ label: '支付宝账号', name: 'account', index: 'account', width: 80 },
+			{ label: '用户名', name: 'username', index: 'username', width: 30 , key: true},
+            {label: '身份', name: 'roleid', index: 'roleId', width: 24, formatter: function(value){
+                    if (value==1){
+                        return "运营商";
+                    }
+                    else if (value==2) {
+                        return "代理";
+                    }
+
+                    else if (value==3) {
+                        return "粉丝";
+                    }
+
+                }},
+			{ label: '提现金额', name: 'money', index: 'money', width: 30 },
+			{ label: '处理状态', name: 'audit', index: 'audit', width: 20 , formatter: function(value){
+				if (value==0){
+                    return "未处理";
+				}
+				else {
+                    return "已处理";
+				}
+
+                }},
+			{ label: '支付宝账号', name: 'account', index: 'account', width: 60 },
 			{ label: '姓名', name: 'name', index: 'name', width: 50 },
 			{ label: '创建时间', name: 'createtime', index: 'createTime', width: 40 },
 			{ label: '更新时间', name: 'updatetime', index: 'updateTime', width: 40 }

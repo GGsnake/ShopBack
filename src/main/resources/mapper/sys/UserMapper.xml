@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.sbed.modules.sys.dao.UserMapper">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="io.sbed.modules.sys.entity.User">
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
+        <result column="login_pwd" property="loginPwd" jdbcType="VARCHAR"/>
+        <result column="login_secret" property="loginSecret" jdbcType="VARCHAR"/>
+        <result column="user_sex" property="userSex" jdbcType="VARCHAR"/>
+        <result column="user_phone" property="userPhone" jdbcType="VARCHAR"/>
+        <result column="user_status" property="userStatus" jdbcType="VARCHAR"/>
+        <result column="user_score" property="userScore" jdbcType="VARCHAR"/>
+        <result column="user_total_score" property="userTotalScore" jdbcType="VARCHAR"/>
+        <result column="last_time" property="lastTime" jdbcType="TIMESTAMP"/>
+        <result column="user_money" property="userMoney" jdbcType="BIGINT"/>
+        <result column="lock_money" property="lockMoney" jdbcType="BIGINT"/>
+        <result column="distribut_money" property="distributMoney" jdbcType="BIGINT"/>
+        <result column="pay_pwd" property="payPwd" jdbcType="VARCHAR"/>
+        <result column="wx_open_id" property="wxOpenId" jdbcType="VARCHAR"/>
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        create_time,
+        id,
+        update_time,
+        status,
+        user_name,
+        login_name,
+        login_pwd,
+        login_secret,
+        user_sex,
+        user_phone,
+        user_status,
+        user_score,
+        user_total_score,
+        last_time,
+        user_money,
+        lock_money,
+        distribut_money,
+        pay_pwd,
+        wx_open_id,
+        open_id
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="user.id">
+        INSERT INTO user (
+            create_time,
+            id,
+            update_time,
+            status,
+            user_name,
+            login_name,
+            login_pwd,
+            login_secret,
+            user_sex,
+            user_phone,
+            user_status,
+            user_score,
+            user_total_score,
+            last_time,
+            user_money,
+            lock_money,
+            distribut_money,
+            pay_pwd,
+            wx_open_id,
+            open_id
+        ) VALUES (
+            #{user.createTime,jdbcType=TIMESTAMP},
+            #{user.id,jdbcType=INTEGER},
+            #{user.updateTime,jdbcType=TIMESTAMP},
+            #{user.status,jdbcType=INTEGER},
+            #{user.userName,jdbcType=VARCHAR},
+            #{user.loginName,jdbcType=VARCHAR},
+            #{user.loginPwd,jdbcType=VARCHAR},
+            #{user.loginSecret,jdbcType=VARCHAR},
+            #{user.userSex,jdbcType=VARCHAR},
+            #{user.userPhone,jdbcType=VARCHAR},
+            #{user.userStatus,jdbcType=VARCHAR},
+            #{user.userScore,jdbcType=VARCHAR},
+            #{user.userTotalScore,jdbcType=VARCHAR},
+            #{user.lastTime,jdbcType=TIMESTAMP},
+            #{user.userMoney,jdbcType=BIGINT},
+            #{user.lockMoney,jdbcType=BIGINT},
+            #{user.distributMoney,jdbcType=BIGINT},
+            #{user.payPwd,jdbcType=VARCHAR},
+            #{user.wxOpenId,jdbcType=VARCHAR},
+            #{user.openId,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="user.id">
+        INSERT INTO user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="user.createTime!=null"> create_time,</if>
+            <if test="user.id!=null"> id,</if>
+            <if test="user.updateTime!=null"> update_time,</if>
+            <if test="user.status!=null"> status,</if>
+            <if test="user.userName!=null"> user_name,</if>
+            <if test="user.loginName!=null"> login_name,</if>
+            <if test="user.loginPwd!=null"> login_pwd,</if>
+            <if test="user.loginSecret!=null"> login_secret,</if>
+            <if test="user.userSex!=null"> user_sex,</if>
+            <if test="user.userPhone!=null"> user_phone,</if>
+            <if test="user.userStatus!=null"> user_status,</if>
+            <if test="user.userScore!=null"> user_score,</if>
+            <if test="user.userTotalScore!=null"> user_total_score,</if>
+            <if test="user.lastTime!=null"> last_time,</if>
+            <if test="user.userMoney!=null"> user_money,</if>
+            <if test="user.lockMoney!=null"> lock_money,</if>
+            <if test="user.distributMoney!=null"> distribut_money,</if>
+            <if test="user.payPwd!=null"> pay_pwd,</if>
+            <if test="user.wxOpenId!=null"> wx_open_id,</if>
+            <if test="user.openId!=null"> open_id,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="user.createTime!=null">#{user.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="user.id!=null">#{user.id,jdbcType=INTEGER},
+            </if>
+            <if test="user.updateTime!=null">#{user.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="user.status!=null">#{user.status,jdbcType=INTEGER},
+            </if>
+            <if test="user.userName!=null">#{user.userName,jdbcType=VARCHAR},
+            </if>
+            <if test="user.loginName!=null">#{user.loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="user.loginPwd!=null">#{user.loginPwd,jdbcType=VARCHAR},
+            </if>
+            <if test="user.loginSecret!=null">#{user.loginSecret,jdbcType=VARCHAR},
+            </if>
+            <if test="user.userSex!=null">#{user.userSex,jdbcType=VARCHAR},
+            </if>
+            <if test="user.userPhone!=null">#{user.userPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="user.userStatus!=null">#{user.userStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="user.userScore!=null">#{user.userScore,jdbcType=VARCHAR},
+            </if>
+            <if test="user.userTotalScore!=null">#{user.userTotalScore,jdbcType=VARCHAR},
+            </if>
+            <if test="user.lastTime!=null">#{user.lastTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="user.userMoney!=null">#{user.userMoney,jdbcType=BIGINT},
+            </if>
+            <if test="user.lockMoney!=null">#{user.lockMoney,jdbcType=BIGINT},
+            </if>
+            <if test="user.distributMoney!=null">#{user.distributMoney,jdbcType=BIGINT},
+            </if>
+            <if test="user.payPwd!=null">#{user.payPwd,jdbcType=VARCHAR},
+            </if>
+            <if test="user.wxOpenId!=null">#{user.wxOpenId,jdbcType=VARCHAR},
+            </if>
+            <if test="user.openId!=null">#{user.openId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO user (
+            create_time,
+            id,
+            update_time,
+            status,
+            user_name,
+            login_name,
+            login_pwd,
+            login_secret,
+            user_sex,
+            user_phone,
+            user_status,
+            user_score,
+            user_total_score,
+            last_time,
+            user_money,
+            lock_money,
+            distribut_money,
+            pay_pwd,
+            wx_open_id,
+            open_id
+        )VALUES
+        <foreach collection="users" item="user" index="index" separator=",">
+            (
+            #{user.createTime,jdbcType=TIMESTAMP},
+            #{user.id,jdbcType=INTEGER},
+            #{user.updateTime,jdbcType=TIMESTAMP},
+            #{user.status,jdbcType=INTEGER},
+            #{user.userName,jdbcType=VARCHAR},
+            #{user.loginName,jdbcType=VARCHAR},
+            #{user.loginPwd,jdbcType=VARCHAR},
+            #{user.loginSecret,jdbcType=VARCHAR},
+            #{user.userSex,jdbcType=VARCHAR},
+            #{user.userPhone,jdbcType=VARCHAR},
+            #{user.userStatus,jdbcType=VARCHAR},
+            #{user.userScore,jdbcType=VARCHAR},
+            #{user.userTotalScore,jdbcType=VARCHAR},
+            #{user.lastTime,jdbcType=TIMESTAMP},
+            #{user.userMoney,jdbcType=BIGINT},
+            #{user.lockMoney,jdbcType=BIGINT},
+            #{user.distributMoney,jdbcType=BIGINT},
+            #{user.payPwd,jdbcType=VARCHAR},
+            #{user.wxOpenId,jdbcType=VARCHAR},
+            #{user.openId,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="updateByPrimaryKeySelective">
+        UPDATE user
+        <set>
+            <if test="user.createTime != null"> create_time= #{user.createTime,jdbcType=TIMESTAMP},</if>
+            <if test="user.updateTime != null"> update_time= #{user.updateTime,jdbcType=TIMESTAMP},</if>
+            <if test="user.status != null"> status= #{user.status,jdbcType=INTEGER},</if>
+            <if test="user.userName != null"> user_name= #{user.userName,jdbcType=VARCHAR},</if>
+            <if test="user.loginName != null"> login_name= #{user.loginName,jdbcType=VARCHAR},</if>
+            <if test="user.loginPwd != null"> login_pwd= #{user.loginPwd,jdbcType=VARCHAR},</if>
+            <if test="user.loginSecret != null"> login_secret= #{user.loginSecret,jdbcType=VARCHAR},</if>
+            <if test="user.userSex != null"> user_sex= #{user.userSex,jdbcType=VARCHAR},</if>
+            <if test="user.userPhone != null"> user_phone= #{user.userPhone,jdbcType=VARCHAR},</if>
+            <if test="user.userStatus != null"> user_status= #{user.userStatus,jdbcType=VARCHAR},</if>
+            <if test="user.userScore != null"> user_score= #{user.userScore,jdbcType=VARCHAR},</if>
+            <if test="user.userTotalScore != null"> user_total_score= #{user.userTotalScore,jdbcType=VARCHAR},</if>
+            <if test="user.lastTime != null"> last_time= #{user.lastTime,jdbcType=TIMESTAMP},</if>
+            <if test="user.userMoney != null"> user_money= #{user.userMoney,jdbcType=BIGINT},</if>
+            <if test="user.lockMoney != null"> lock_money= #{user.lockMoney,jdbcType=BIGINT},</if>
+            <if test="user.distributMoney != null"> distribut_money= #{user.distributMoney,jdbcType=BIGINT},</if>
+            <if test="user.payPwd != null"> pay_pwd= #{user.payPwd,jdbcType=VARCHAR},</if>
+            <if test="user.wxOpenId != null"> wx_open_id= #{user.wxOpenId,jdbcType=VARCHAR},</if>
+            <if test="user.openId != null"> open_id= #{user.openId,jdbcType=VARCHAR}</if>
+        </set>
+        WHERE id = #{user.id,jdbcType=INTEGER}
+    </update>
+</mapper>
+

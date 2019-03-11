@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.sbed.modules.sys.dao.SysJhConfigDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.sbed.modules.sys.entity.SysJhConfig" id="jhConfigMap">
+        <result property="id" column="id"/>
+        <result property="configno" column="ConfigNo"/>
+        <result property="configname" column="ConfigName"/>
+        <result property="configvalue" column="ConfigValue"/>
+        <result property="remark" column="Remark"/>
+        <result property="editby" column="EditBy"/>
+        <result property="edittime" column="EditTime"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysJhConfig">
+		select * from jh_config where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysJhConfig">
+		select * from jh_config
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from jh_config 
+	</select>
+	 
+	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysJhConfig" useGeneratedKeys="true" keyProperty="id">
+		insert into jh_config
+		(
+			`ConfigNo`, 
+			`ConfigName`, 
+			`ConfigValue`, 
+			`Remark`, 
+			`EditBy`, 
+			`EditTime`
+		)
+		values
+		(
+			#{configno}, 
+			#{configname}, 
+			#{configvalue}, 
+			#{remark}, 
+			#{editby}, 
+			#{edittime}
+		)
+	</insert>
+
+
+
+	
+	 
+	<update id="update" parameterType="io.sbed.modules.sys.entity.SysJhConfig">
+		update jh_config 
+		<set>
+			<if test="configno != null">`ConfigNo` = #{configno}, </if>
+			<if test="configname != null">`ConfigName` = #{configname}, </if>
+			<if test="configvalue != null">`ConfigValue` = #{configvalue}, </if>
+			<if test="remark != null">`Remark` = #{remark}, </if>
+			<if test="editby != null">`EditBy` = #{editby}, </if>
+			<if test="edittime != null">`EditTime` = #{edittime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from jh_config where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from jh_config where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

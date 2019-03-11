@@ -32,13 +32,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //映射上传文件的地址
-        registry.addResourceHandler("/uploadFile/**").addResourceLocations("file:"+FileUtils.getTempPath());
-        //映射swagger
-        if(swaggerOpen){
-            registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-            registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-        }
+//        //映射上传文件的地址
+//        registry.addResourceHandler("/uploadFile/**").addResourceLocations("file:"+FileUtils.getTempPath());
+//        //映射swagger
+//        if(swaggerOpen){
+//            registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+//            registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+//        }
         super.addResourceHandlers(registry);
     }
 
@@ -69,7 +69,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     //添加api interceptor
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(apiInterceptor).addPathPatterns("/api/**");
+//        registry.addInterceptor(apiInterceptor).addPathPatterns("/api/**");
     }
 
 }

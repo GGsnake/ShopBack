@@ -20,6 +20,26 @@ public class SysJhCashApply implements Serializable {
 	private Integer audit;
 	//删除状态
 	private Integer status;
+	private Integer roleid;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	private String username;
+
+	public Integer getRoleid() {
+		return roleid;
+	}
+
+	public void setRoleid(Integer roleid) {
+		this.roleid = roleid;
+	}
+
 	//创建时间
 	private Date createtime;
 	//更新

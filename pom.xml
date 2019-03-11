@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.springface</groupId>
-    <artifactId>sbed</artifactId>
-    <version>1.0.0</version>
-    <packaging>war</packaging>
+    <artifactId>jh</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
     <description>springface project for Spring Boot</description>
 
     <parent>
@@ -42,11 +42,12 @@
     </properties>
 
     <dependencies>
+
         <dependency>
-        <groupId>commons-httpclient</groupId>
-        <artifactId>commons-httpclient</artifactId>
-        <version>3.1</version>
-    </dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -290,7 +291,7 @@
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13 </version>
+            <version>1.9.13</version>
         </dependency>
 
         <dependency>

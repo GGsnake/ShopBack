@@ -29,7 +29,6 @@
             <div class="panel-body">
 				<div class="row">
 					<a class="btn btn-default" @click="refresh">刷新</a>
-
 					<a v-if="hasPermission('sys:daygoods:save')" class="btn btn-success" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
 					<a v-if="hasPermission('sys:daygoods:update')" class="btn btn-warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
 					<a v-if="hasPermission('sys:daygoods:delete')" class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
@@ -38,47 +37,39 @@
 		</div>
 	    <table id="jqGrid"></table>
 	    <div id="jqGridPager"></div>
+		<div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;">
+			<div id="innerdiv" style="position:absolute;">
+				<img id="bigimg" style="border:5px solid #fff;" src="" />
+			</div>
+		</div>
     </div>
     
     <div v-show="!showList" class="panel panel-default">
 		<div class="panel-heading">{{title}}</div>
-		<form class="form-horizontal">
+		<form class="form-horizontal" id="aboutweForm" method="post"
+			  enctype="multipart/form-data">
 											<div class="form-group">
 			   	<label class="col-sm-2 control-label">标题</label>
 			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="daygoods.titile" placeholder="标题"/>
+			      <input type="text" class="form-control" v-model="daygoods.titile" name="titile" placeholder="标题"/>
 			    </div>
 			</div>
 									<div class="form-group">
 			   	<label class="col-sm-2 control-label">内容</label>
 			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="daygoods.content" placeholder="内容"/>
+			      <input type="text" class="form-control" v-model="daygoods.content"   name="content" placeholder="内容"/>
 			    </div>
 			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">头像</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="daygoods.image" placeholder="头像"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">图片内容url数组</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="daygoods.contentImages" placeholder="图片内容url数组"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">删除状态</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="daygoods.status" placeholder="删除状态"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<label class="col-sm-2 control-label">创建时间</label>
-			   	<div class="col-sm-6">
-			      <input type="text" class="form-control" v-model="daygoods.createtime" placeholder="创建时间"/>
-			    </div>
-			</div>
+			<!--<input v-model="indexBanner.id" name="id" type="hidden"/>-->
+				<div class="form-group">
+					<label class="col-sm-2 control-label">图片上传第一张图片</label>
+					<div class="col-sm-6" id="preview">
+						<!--  <input type="text" class="form-control" v-model="indexBanner.pic" placeholder="图片路径"/> -->
+						<input id="file" class="filepath" onchange="changepic(this)" type="file" name="file" multiple><br>
+
+					</div>
+				</div>
+
 							<div class="form-group">
 				<label class="col-sm-2 control-label"></label>
 				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
@@ -89,5 +80,16 @@
 </div>
 
 <script src="../../../js/modules/sys/daygoods.js"></script>
+<script>
+    function changepic() {
+        var reads= new FileReader();
+        f=document.getElementById('file').files[0];
+        reads.readAsDataURL(f);
+        reads.onload=function (e) {
+            document.getElementById('show').src=this.result;
+            document.getElementById('img1').src=this.result;
+        };
+    }
+</script>
 </body>
 </html>

@@ -14,9 +14,11 @@ public interface SysJhCashApplyService {
 	SysJhCashApply queryObject(Integer id);
 	
 	List<SysJhCashApply> queryList(Map<String, Object> map);
-	
+	List<SysJhCashApply> queryAgentList(Map<String, Object> map);
+
 	int queryTotal(Map<String, Object> map);
-	
+	int queryAgentTotal(Map<String, Object> map);
+
 	void save(SysJhCashApply jhCashApply);
 	
 	void update(SysJhCashApply jhCashApply);

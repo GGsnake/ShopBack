@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>淘宝采集表2</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+    <link rel="stylesheet" href="../../../plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" href="../../../css/main.css">
+    <script src="../../../libs/jquery.min.js"></script>
+    <script src="../../../plugins/layer/layer.js"></script>
+    <script src="../../../libs/bootstrap.min.js"></script>
+    <script src="../../../libs/vue.min.js"></script>
+    <script src="../../../plugins/jqgrid/grid.locale-cn.js"></script>
+    <script src="../../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+    <script src="../../../plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script src="../../../js/common.js"></script>
+</head>
+<body>
+<div id="rapp" v-cloak>
+    <div v-show="showList">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                功能操作
+            </div>
+
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group col-sm-2">
+                        <input type="text"  class="form-control" v-model="q.title"
+                               @keyup.enter="query" placeholder="标题">
+                        <input type="text"  class="form-control" v-model="q.commission"
+                               placeholder="佣金大于">
+                    </div>
+                    <div class="form-group col-sm-2">
+                        <input type="text"  class="form-control" v-model="q.volume"
+                               placeholder="销量大于">
+                        <input type="text" class="form-control" v-model="q.coupon"
+                               placeholder="优惠券大于">
+
+                    </div>
+                    <div class="form-group col-sm-2">
+
+                        <select class="form-control" v-model="q.opt">
+                            <option value="">选择类目</option>
+                            <option value="652">数码</option>
+                            <option value="670">电脑、办公</option>
+                            <!--<option value="737">家用电器</option>-->
+                            <option value="1320">食品饮料</option>
+                            <!--<option value="15901">家庭清洁/纸品</option>-->
+                            <option value="1315">服饰内衣</option>
+                            <option value="1316">美妆护肤</option>
+                            <option value="1318">运动户外</option>
+                            <option value="1319">母婴</option>
+                            <option value="1620">家居日用</option>
+                            <option value="6196">厨具</option>
+                        </select>
+
+                    </div>
+                </div>
+                <div class="grid-btn">
+                    <a class="btn btn-default" @click="query">查询</a>
+                    <a class="btn btn-default" @click="refresh">刷新</a>
+                    <!--<a v-if="hasPermission('sys:attachment:info')" class="btn btn-info" @click="info"><i class="fa fa-info"></i>&nbsp;查看</a>-->
+                    <!--<a v-if="hasPermission('sys:attachment:upload')" class="btn btn-success" id="upload"><i class="fa fa-upload"></i>&nbsp;上传文件</a>-->
+                    <!--<a v-if="hasPermission('sys:attachment:download')" class="btn btn-primary" @click="download"><i class="fa fa-download"></i>&nbsp;下载文件</a>-->
+                    <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+                </div>
+            </div>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <!--<div v-show="!showList" class="panel panel-default">-->
+        <!--<div class="panel-heading">{{title}}</div>-->
+        <!--<form class="form-horizontal">-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">商品图片</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.picturl" placeholder="商品图片"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">店铺名</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.shoptitle" placeholder="店铺名"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">url</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.jdurl" placeholder="url"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">标题</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.title" placeholder="标题"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">佣金比例</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.commissionrate" placeholder="佣金比例"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">优惠卷金额</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.coupon" placeholder="优惠卷金额"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">推客的预估佣金额</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.zkfinalprice" placeholder="推客的预估佣金额"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">销量</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.volume" placeholder="销量"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">商品id</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.numiid" placeholder="商品id"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">删除状态</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.status" placeholder="删除状态"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">类目属性</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.opt" placeholder="类目属性"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">优惠卷权重</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.orderCoupon" placeholder="优惠卷权重"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">佣金权重</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.orderCommiss" placeholder="佣金权重"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">销量权重</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.orderVolume" placeholder="销量权重"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">创建时间</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.createtime" placeholder="创建时间"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label"></label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.istamll" placeholder=""/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label"></label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.commission" placeholder=""/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">cid</label>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<input type="text" class="form-control" v-model="jhJdGood.cid" placeholder="cid"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label"></label>-->
+                <!--<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>-->
+                <!--&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>-->
+            <!--</div>-->
+        <!--</form>-->
+    <!--</div>-->
+</div>
+
+<script src="../../../js/modules/qys/jhJdGood.js"></script>
+</body>
+</html>

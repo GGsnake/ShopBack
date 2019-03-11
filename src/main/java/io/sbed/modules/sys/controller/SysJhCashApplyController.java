@@ -43,6 +43,22 @@ public class SysJhCashApplyController extends AbstractController{
 		
 		return Result.ok().put("page", pageUtil);
 	}
+	/**
+	 * 列表
+	 */
+	@RequestMapping("/agentlist")
+	@RequiresPermissions("sys:jhCashApply:list")
+	public Result agentlist(@RequestParam Map<String, Object> params){
+		//查询列表数据
+        Query query = new Query(params);
+
+		List<SysJhCashApply> jhCashApplyList = jhCashApplyService.queryAgentList(query);
+		int total = jhCashApplyService.queryAgentTotal(query);
+
+		PageUtils pageUtil = new PageUtils(jhCashApplyList, total, query.getLimit(), query.getPage());
+
+		return Result.ok().put("page", pageUtil);
+	}
 	
 	
 	/**

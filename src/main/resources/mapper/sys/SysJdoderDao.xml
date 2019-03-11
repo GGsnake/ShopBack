@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.sbed.modules.sys.dao.SysJdoderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.sbed.modules.sys.entity.SysJdoder" id="jdoderMap">
+        <result property="id" column="id"/>
+        <result property="positionid" column="positionId"/>
+        <result property="actualcosprice" column="actualCosPrice"/>
+        <result property="actualfee" column="actualFee"/>
+        <result property="commissionrate" column="commissionRate"/>
+        <result property="estimatecosprice" column="estimateCosPrice"/>
+        <result property="estimatefee" column="estimateFee"/>
+        <result property="finalrate" column="finalRate"/>
+        <result property="price" column="price"/>
+        <result property="skuid" column="skuId"/>
+        <result property="skuname" column="skuName"/>
+        <result property="orderid" column="orderId"/>
+        <result property="paymonth" column="payMonth"/>
+        <result property="finishtime" column="finishTime"/>
+        <result property="ordertime" column="orderTime"/>
+        <result property="validcode" column="validCode"/>
+        <result property="createtime" column="createTime"/>
+        <result property="updatetime" column="updateTime"/>
+        <result property="settle" column="settle"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysJdoder">
+		select * from jdoder where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysJdoder">
+		select * from jdoder
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from jdoder 
+	</select>
+	 
+	<insert id="save" parameterType="io.sbed.modules.sys.entity.SysJdoder" useGeneratedKeys="true" keyProperty="id">
+		insert into jdoder
+		(
+			`positionId`, 
+			`actualCosPrice`, 
+			`actualFee`, 
+			`commissionRate`, 
+			`estimateCosPrice`, 
+			`estimateFee`, 
+			`finalRate`, 
+			`price`, 
+			`skuId`, 
+			`skuName`, 
+			`orderId`, 
+			`payMonth`, 
+			`finishTime`, 
+			`orderTime`, 
+			`validCode`, 
+			`createTime`, 
+			`updateTime`, 
+			`settle`
+		)
+		values
+		(
+			#{positionid}, 
+			#{actualcosprice}, 
+			#{actualfee}, 
+			#{commissionrate}, 
+			#{estimatecosprice}, 
+			#{estimatefee}, 
+			#{finalrate}, 
+			#{price}, 
+			#{skuid}, 
+			#{skuname}, 
+			#{orderid}, 
+			#{paymonth}, 
+			#{finishtime}, 
+			#{ordertime}, 
+			#{validcode}, 
+			#{createtime}, 
+			#{updatetime}, 
+			#{settle}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.sbed.modules.sys.entity.SysJdoder">
+		update jdoder 
+		<set>
+			<if test="positionid != null">`positionId` = #{positionid}, </if>
+			<if test="actualcosprice != null">`actualCosPrice` = #{actualcosprice}, </if>
+			<if test="actualfee != null">`actualFee` = #{actualfee}, </if>
+			<if test="commissionrate != null">`commissionRate` = #{commissionrate}, </if>
+			<if test="estimatecosprice != null">`estimateCosPrice` = #{estimatecosprice}, </if>
+			<if test="estimatefee != null">`estimateFee` = #{estimatefee}, </if>
+			<if test="finalrate != null">`finalRate` = #{finalrate}, </if>
+			<if test="price != null">`price` = #{price}, </if>
+			<if test="skuid != null">`skuId` = #{skuid}, </if>
+			<if test="skuname != null">`skuName` = #{skuname}, </if>
+			<if test="orderid != null">`orderId` = #{orderid}, </if>
+			<if test="paymonth != null">`payMonth` = #{paymonth}, </if>
+			<if test="finishtime != null">`finishTime` = #{finishtime}, </if>
+			<if test="ordertime != null">`orderTime` = #{ordertime}, </if>
+			<if test="validcode != null">`validCode` = #{validcode}, </if>
+			<if test="createtime != null">`createTime` = #{createtime}, </if>
+			<if test="updatetime != null">`updateTime` = #{updatetime}, </if>
+			<if test="settle != null">`settle` = #{settle}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from jdoder where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from jdoder where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -50,6 +50,24 @@ public class SysOder implements Serializable {
 	private Date updatetime;
 	//0正常;1冻结
 	private Integer status;
+	//0正常;1冻结
+	private Integer settle;
+
+	public String getpId() {
+		return pId;
+	}
+
+	public void setpId(String pId) {
+		this.pId = pId;
+	}
+
+	public Integer getSettle() {
+		return settle;
+	}
+
+	public void setSettle(Integer settle) {
+		this.settle = settle;
+	}
 
 	/**
 	 * 设置：用户id

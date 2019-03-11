@@ -61,6 +61,9 @@ public class ShiroConfig {
         filterMap.put("/webjars/**", "anon");//swagger
         filterMap.put("/**/druid/**", "anon");
         filterMap.put("/sys/login", "anon");
+        filterMap.put("/show/*", "anon");
+        filterMap.put("/sys/config/*", "anon");
+        filterMap.put("/layui/**", "anon");
         //yxl的配置开始【方法】
 //        filterMap.put("/qys/videoList/list", "anon");
         //yxl的配置结束【方法】
@@ -69,6 +72,8 @@ public class ShiroConfig {
         filterMap.put("/**/*.js", "anon");
         filterMap.put("/**/*.html", "anon");
         filterMap.put("/fonts/**", "anon");
+        filterMap.put("/sys/config/api/collect/jd", "anon");
+        filterMap.put("/sys/config/api/collect/tb", "anon");
         filterMap.put("/plugins/**", "anon");
         filterMap.put("/favicon.ico", "anon");
         filterMap.put("/captcha.jpg", "anon");

@@ -5,7 +5,9 @@ import io.sbed.common.exception.SbedException;
 import io.sbed.common.utils.PageUtils;
 import io.sbed.common.utils.Query;
 import io.sbed.common.utils.Result;
+import io.sbed.modules.sys.dao.SettingDao;
 import io.sbed.modules.sys.entity.SysConfig;
+import io.sbed.modules.sys.model.Config;
 import io.sbed.modules.sys.service.SysConfigService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -25,6 +27,8 @@ import java.util.Map;
 public class SysConfigController extends AbstractController {
 	@Autowired
 	private SysConfigService sysConfigService;
+	@Autowired
+	private SettingDao settingDao;
 	
 	/**
 	 * 所有参数列表
@@ -40,7 +44,21 @@ public class SysConfigController extends AbstractController {
 		PageUtils pageUtil = new PageUtils(configList, total, query.getLimit(), query.getPage());
 		return Result.ok().put("page", pageUtil);
 	}
-	
+
+	/**
+	 * 所有参数列表
+	 */
+	@RequestMapping("/getlist")
+	@RequiresPermissions("sys:config:list")
+	public Result getlist(@RequestParam Map<String, Object> params){
+		//查询列表数据
+		Query query = new Query(params);
+		List<Config> configList = settingDao.queryListSetting(query);
+		int total = settingDao.count();
+//		PageUtils pageUtil = new PageUtils(configList, total, query.getLimit(), query.getPage());
+		return Result.ok().put("data", configList).put("count",total);
+	}
+
 	
 	/**
 	 * 参数信息

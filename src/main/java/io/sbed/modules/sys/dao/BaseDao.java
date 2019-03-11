@@ -13,6 +13,7 @@ public interface BaseDao<T> {
 	void save(T t);
 	
 	void save(Map<String, Object> map);
+	void saveJd(Map<String, Object> map);
 	
 	void saveBatch(List<T> list);
 	
@@ -33,6 +34,7 @@ public interface BaseDao<T> {
 	List<T> queryList(Object id);
 	
 	int queryTotal(Map<String, Object> map);
+
 
 	int queryTotal();
 	

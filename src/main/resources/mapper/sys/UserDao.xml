@@ -15,4 +15,14 @@
 	<insert id="createUser" >
 		insert into hot_user(userPhone,loginPwd,createTime) value (#{user.userPhone},#{user.loginPwd},now())
 	</insert>
+
+	<select id="queryTotal" resultType="io.sbed.modules.sys.entity.User">
+		select count(*) from sys_role
+		<where>
+			<if test="name != null and name != ''">
+				and `name` like concat('%',#{name},'%')
+			</if>
+		</where>
+	</select>
+
 </mapper>

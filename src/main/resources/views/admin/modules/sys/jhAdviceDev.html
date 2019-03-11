@@ -73,5 +73,17 @@
 </div>
 
 <script src="../../../js/modules/sys/jhAdviceDev.js"></script>
+
+<script>
+    function changepic() {
+        var reads= new FileReader();
+        f=document.getElementById('file').files[0];
+        reads.readAsDataURL(f);
+        reads.onload=function (e) {
+            document.getElementById('show').src=this.result;
+            document.getElementById('img1').src=this.result;
+        };
+    }
+</script>
 </body>
 </html>

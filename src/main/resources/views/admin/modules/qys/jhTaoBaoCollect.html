@@ -57,6 +57,19 @@
              <input type="text" name="salesVolume" lay-verify="number" autocomplete="off" placeholder="请输入销量" class="layui-input">
          </div>
      </div>
+
+     <div class="layui-form-item">
+         <label class="layui-form-label">采集数量</label>
+         <div class="layui-input-block">
+             <input type="text" name="collectCount" lay-verify="number" autocomplete="off" placeholder="请输入销量" class="layui-input">
+         </div>
+     </div>
+     <div class="layui-form-item">
+         <label class="layui-form-label">采集超时时间(秒)</label>
+         <div class="layui-input-block">
+             <input type="text" name="timeout" lay-verify="number" autocomplete="off" placeholder="采集超时时间(秒)" class="layui-input">
+         </div>
+     </div>
   <!--<div class="layui-form-item">-->
     <!--<label class="layui-form-label">类目</label>-->
     <!--<div class="layui-input-block">-->
@@ -83,6 +96,7 @@
           <option value="5">爆款</option>
           <option value="6">精选</option>
           <option value="7">首页</option>
+          <option value="2">聚划算</option>
       </select>
     </div>
   </div>
@@ -146,14 +160,15 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     let param = data.field;
     console.log(param)
     $.ajax({
-          url: "http://www.quanhuangmaoyi.com:8086/hjht/sys/config/api/collect/tb",
+          // url: "http://www.quanhuangmaoyi.com:8086/hjht/sys/config/api/collect/tb",
+          url: "http://127.0.0.1:8099/hjht/sys/config/api/collect/tb",
           dataType: 'json',//服务器返回json格式数据
           async: true,
           type: 'post',//HTTP请求类型
           data: JSON.stringify(param),
           headers: {'Content-Type': 'application/json'},
-          success: function () {
-          alert("开始采集")
+          success: function (data) {
+          alert(data.msg)
           },
           error: function () {
           alert("请求异常")

@@ -12,7 +12,7 @@ public interface BaseDao<T> {
 	
 	void save(T t);
 	
-	void save(Map<String, Object> map);
+	Integer save(Map<String, Object> map);
 	void saveJd(Map<String, Object> map);
 	
 	void saveBatch(List<T> list);

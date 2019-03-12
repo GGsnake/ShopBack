@@ -11,8 +11,10 @@ import java.util.Map;
 public interface SysJhTaobaoAllDao extends BaseDao<SysJhTaobaoAll> {
 
     int queryTotalOpt(Map<String, Object> map);
+    int queryTotalOptAll(Map<String, Object> map);
 
 
 
     List<SysJhTaobaoAll> queryListOpt(Map<String, Object> map);
+    List<SysJhTaobaoAll> queryListOptAll(Map<String, Object> map);
 }

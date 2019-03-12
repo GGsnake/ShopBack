@@ -50,6 +50,12 @@
      </div>
 
      <div class="layui-form-item">
+         <label class="layui-form-label">采集数量</label>
+         <div class="layui-input-block">
+             <input type="text" name="collectCount" lay-verify="number" autocomplete="off" placeholder="请输入销量" class="layui-input">
+         </div>
+     </div>
+     <div class="layui-form-item">
          <label class="layui-form-label">采集商品类目选择</label>
          <div class="layui-input-block">
              <select name="opt" lay-filter="aihao">
@@ -64,6 +70,7 @@
                  <option value="1319">母婴</option>
                  <option value="1620">家居日用</option>
                  <option value="6196">厨具</option>
+                 <option value="1713">图书</option>
              </select>
          </div>
      </div>
@@ -102,13 +109,14 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     console.log(param)
     $.ajax({
           url: "http://www.quanhuangmaoyi.com:8086/hjht/sys/config/api/collect/jd",
+          // url: "http://127.0.0.1:8086/hjht/sys/config/api/collect/jd",
           dataType: 'json',//服务器返回json格式数据
           async: true,
           type: 'post',//HTTP请求类型
           data: JSON.stringify(param),
           headers: {'Content-Type': 'application/json'},
-          success: function () {
-          alert("请求成功")
+          success: function (data) {
+              alert(data.msg)
           },
           error: function () {
           alert("请求异常")

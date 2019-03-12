@@ -1,5 +1,6 @@
 package io.sbed.modules.sys.dao;
 
+import io.sbed.modules.sys.entity.SysConfig;
 import io.sbed.modules.sys.model.Config;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Mapper
-public interface SettingDao {
+public interface SettingDao{
     //轮播图
     @Select("select url from jh_banner_img order by id desc limit 3")
     List<String> queryBanner();
@@ -30,6 +31,10 @@ public interface SettingDao {
      * 根据key，更新value
      */
     int update(Config config);
+    /**
+     * 根据key，更新value
+     */
+    int save(Config config);
     /**
      * 根据key，更新value
      */

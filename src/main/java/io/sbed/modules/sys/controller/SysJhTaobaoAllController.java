@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import io.sbed.common.utils.PageUtils;
 import io.sbed.common.utils.Query;
 import io.sbed.common.utils.Result;
+import io.sbed.modules.sys.dao.SysJhTaobaoAllDao;
 import io.sbed.modules.sys.entity.SysJhTaobaoAll;
 import io.sbed.modules.sys.service.SysJhTaobaoAllService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -25,6 +26,8 @@ public class SysJhTaobaoAllController extends AbstractController {
 
 	@Autowired
 	private SysJhTaobaoAllService jhTaobaoAllService;
+	@Autowired
+	private SysJhTaobaoAllDao sysJhTaobaoAllDao;
 
 	/**
 	 * 列表
@@ -69,6 +72,7 @@ public class SysJhTaobaoAllController extends AbstractController {
 	public Result hot(@RequestParam Map<String, Object> params,@PathVariable Integer id){
 		//查询列表数据
         Query query = new Query(params);
+
 		query.put("opt",id);
 		List<SysJhTaobaoAll> jhTaobaoAllList = jhTaobaoAllService.queryList(query);
 		int total = jhTaobaoAllService.queryTotal(query);
@@ -77,7 +81,24 @@ public class SysJhTaobaoAllController extends AbstractController {
 
 		return Result.ok().put("page", pageUtil);
 	}
-	
+
+	/**
+	 * 列表
+	 */
+	@RequestMapping("/allin")
+//	@RequiresPermissions("sys:jhTaobaoAll:list")
+	public Result all(@RequestParam Map<String, Object> params){
+		//查询列表数据
+        Query query = new Query(params);
+
+		List<SysJhTaobaoAll> jhTaobaoAllList = sysJhTaobaoAllDao.queryListOptAll(query);
+		int total = sysJhTaobaoAllDao.queryTotalOptAll(query);
+
+		PageUtils pageUtil = new PageUtils(jhTaobaoAllList, total, query.getLimit(), query.getPage());
+
+		return Result.ok().put("page", pageUtil);
+	}
+
 	
 	/**
 	 * 信息

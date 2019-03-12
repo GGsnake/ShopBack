@@ -9,7 +9,7 @@ public interface CollectService {
      * @param collectBean
      * @throws ApiException
      */
-    void collectTaobao(CollectBean collectBean) throws ApiException;
+    Boolean collectTaobao(CollectBean collectBean) throws ApiException;
     /**
      * 淘宝采集家居
      * @param collectBean

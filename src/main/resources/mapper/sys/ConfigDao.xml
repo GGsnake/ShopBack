@@ -28,10 +28,10 @@
 		</if>
 	</select>
 	<!---->
-	<!--<insert id="save" parameterType="io.sbed.modules.sys.entity.SysConfig">-->
-		<!--insert into sys_config(`key`, `value`, remark)-->
-			<!--values(#{key},#{value},#{remark})-->
-	<!--</insert>-->
+	<insert id="save" parameterType="io.sbed.modules.sys.model.Config">
+		insert into jh_config(`key`, `value`)
+			values(#{key},#{value})
+	</insert>
 	<!---->
 	<!--<update id="update" parameterType="io.sbed.modules.sys.entity.SysConfig">-->
 		<!--update sys_config set `key` = #{key}, `value` = #{value}, remark = #{remark} -->

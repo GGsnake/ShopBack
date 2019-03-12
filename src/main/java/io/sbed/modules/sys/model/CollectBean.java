@@ -20,4 +20,6 @@ public class CollectBean {
     private Integer Amount ;
     private Integer opt ;
     private Integer comsaa ;
+    private Integer collectCount ;
+    private Integer timeout ;
 }

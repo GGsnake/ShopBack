@@ -7,26 +7,26 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 //@SpringBootApplication
-////@EnableEurekaClient
-////@EnableFeignClients
+//@EnableAsync
 //public class SbedApplication extends SpringBootServletInitializer {
-//	public static void main(String[] args) {
-//		SpringApplication.run(SbedApplication.class, args);
-//	}
 //
-//	@Override
-//	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-//		return application.sources(SbedApplication.class);
-//	}
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//        // 注意这里一定要指向原先用main方法执行的Application启动类
+//        return builder.sources(SbedApplication.class);
+//    }
+//    public static void main(String[] args) {
+//        SpringApplication.run(SbedApplication.class, args);
+//    }
 //}
 
-@SpringBootApplication
+
 //@EnableEurekaClient
 //@EnableFeignClients
+@SpringBootApplication
 @EnableAsync
-public class SbedApplication  {
-	public static void main(String[] args) {
-		SpringApplication.run(SbedApplication.class, args);
-	}
+public class SbedApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(SbedApplication.class, args);
+    }
 
 }

@@ -30,7 +30,7 @@ public class CollectController {
     private RedisUtils redisUtils;
 
     @PostMapping("/collect/tb")
-    public Result collectList(@RequestBody String body) throws ApiException {
+    public Result collectListTb(@RequestBody String body) throws ApiException {
 //        Config config = settingDao.querySetting("now");
         boolean tbcollect = redisUtils.exists("tbcollect");
         if (tbcollect) {
@@ -46,7 +46,7 @@ public class CollectController {
     }
 
     @PostMapping("/collect/jd")
-    public Result collectListjd(@RequestBody String body) throws ApiException {
+    public Result collectListJd(@RequestBody String body) throws ApiException {
         boolean tbcollect = redisUtils.exists("jdcollect");
         if (tbcollect) {
             return Result.ok("采集器正在运行中 请稍后");
@@ -55,6 +55,19 @@ public class CollectController {
         log.warning("京东开始采集");
         redisUtils.set("jdcollect","s");
         collectService.collectJD(collectBean);
+        return Result.ok("已开始采集 请前往总分类查看新数据");
+    }
+
+    @PostMapping("/collect/pdd")
+    public Result collectListPdd(@RequestBody String body) throws ApiException {
+        boolean tbcollect = redisUtils.exists("pddcollect");
+        if (tbcollect) {
+            return Result.ok("采集器正在运行中 请稍后");
+        }
+        CollectBean collectBean = JSONObject.parseObject(body, CollectBean.class);
+        log.warning("拼多多开始");
+        redisUtils.set("pddcollect","s");
+        collectService.collectPDD(collectBean);
         return Result.ok("已开始采集 请前往总分类查看新数据");
     }
 

@@ -144,7 +144,7 @@ public class SysJhTaobaoAllController extends AbstractController {
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("sys:jhTaobaoAll:update")
+//	@RequiresPermissions("sys:jhTaobaoAll:update")
 	public Result update(@RequestBody SysJhTaobaoAll jhTaobaoAll){
 		jhTaobaoAllService.update(jhTaobaoAll);
 		

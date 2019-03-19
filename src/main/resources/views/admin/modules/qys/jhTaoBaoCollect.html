@@ -58,18 +58,13 @@
          </div>
      </div>
 
-     <div class="layui-form-item">
-         <label class="layui-form-label">采集数量</label>
-         <div class="layui-input-block">
-             <input type="text" name="collectCount" lay-verify="number" autocomplete="off" placeholder="请输入销量" class="layui-input">
-         </div>
-     </div>
-     <div class="layui-form-item">
-         <label class="layui-form-label">采集超时时间(秒)</label>
-         <div class="layui-input-block">
-             <input type="text" name="timeout" lay-verify="number" autocomplete="off" placeholder="采集超时时间(秒)" class="layui-input">
-         </div>
-     </div>
+     <!--<div class="layui-form-item">-->
+         <!--<label class="layui-form-label">采集数量</label>-->
+         <!--<div class="layui-input-block">-->
+             <!--<input type="text" name="collectCount" lay-verify="number" autocomplete="off" placeholder="需要采集的数量" class="layui-input">-->
+         <!--</div>-->
+     <!--</div>-->
+
   <!--<div class="layui-form-item">-->
     <!--<label class="layui-form-label">类目</label>-->
     <!--<div class="layui-input-block">-->
@@ -103,28 +98,6 @@
 
 
 
-  <!--<div class="layui-form-item">-->
-    <!--<label class="layui-form-label"></label>-->
-    <!--<div class="layui-input-block">-->
-      <!--<input type="radio" name="tianMou" value="0" title="是" checked="">-->
-      <!--<input type="radio" name="tianMou" value="1" title="否">-->
-    <!--</div>-->
-  <!--</div>-->
-  <!--<div class="layui-form-item">-->
-    <!--<label class="layui-form-label">包邮</label>-->
-    <!--<div class="layui-input-block">-->
-      <!--<input type="radio" name="freeShipping" value="0" title="是"  checked="">-->
-      <!--<input type="radio" name="freeShipping" value="1" title="否">-->
-    <!--</div>-->
-  <!--</div>-->
-  <!--<div class="layui-form-item">-->
-    <!--<label class="layui-form-label">优惠券</label>-->
-    <!--<div class="layui-input-block">-->
-      <!--<input type="radio" name="Coupon" value="0" title="是" checked="">-->
-      <!--<input type="radio" name="Coupon" value="1" title="否">-->
-    <!--</div>-->
-  <!--</div>-->
-
  
   <div class="layui-form-item">
     <div class="layui-input-block">
@@ -155,13 +128,13 @@ layui.use(['form', 'layedit', 'laydate'], function(){
  
   
  
-  //监听提交
+    //监听提交
   form.on('submit(demo1)', function(data){
     let param = data.field;
     console.log(param)
     $.ajax({
-          // url: "http://www.quanhuangmaoyi.com:8086/hjht/sys/config/api/collect/tb",
-          url: "http://127.0.0.1:8099/hjht/sys/config/api/collect/tb",
+          url: "http://www.quanhuangmaoyi.com/hjht/sys/config/api/collect/tb",
+          // url: "http://127.0.0.1:8080/hjht/sys/config/api/collect/tb",
           dataType: 'json',//服务器返回json格式数据
           async: true,
           type: 'post',//HTTP请求类型

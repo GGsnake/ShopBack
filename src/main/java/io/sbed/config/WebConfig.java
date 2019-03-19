@@ -27,8 +27,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private ApiInterceptor apiInterceptor;
 
-    @Value("${sys.swagger.open:#{false}}")
-    private boolean swaggerOpen;
+//    @Value("${sys.swagger.open:#{false}}")
+//    private boolean swaggerOpen;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

@@ -3,13 +3,19 @@ package io.sbed.modules.sys.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.pdd.pop.sdk.http.PopClient;
+import com.pdd.pop.sdk.http.PopHttpClient;
+import com.pdd.pop.sdk.http.api.request.PddDdkTopGoodsListQueryRequest;
+import com.pdd.pop.sdk.http.api.response.PddDdkTopGoodsListQueryResponse;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.TbkDgMaterialOptionalRequest;
 import com.taobao.api.response.TbkDgMaterialOptionalResponse;
 import io.sbed.common.utils.RedisUtils;
+import io.sbed.modules.sys.dao.SysJhPddAllDao;
 import io.sbed.modules.sys.entity.SysCollectlog;
+import io.sbed.modules.sys.entity.SysJhPddAll;
 import io.sbed.modules.sys.model.CollectBean;
 import io.sbed.modules.sys.model.Config;
 import io.sbed.modules.sys.service.CollectService;
@@ -37,6 +43,8 @@ public class CollectServiceImpl implements CollectService {
     private RedisUtils redisUtils;
     @Autowired
     private SysJhTaobaoAllDao sysJhTaobaoAllDao;
+    @Autowired
+    private SysJhPddAllDao sysJhPddAllDao;
     @Autowired
     private SysCollectlogServiceImpl sysCollectlogService;
 
@@ -209,7 +217,7 @@ public class CollectServiceImpl implements CollectService {
             StringBuilder reqData = new StringBuilder();
             reqData.append("http://v2.api.haodanku.com/itemlist/");
             reqData.append("apikey/" + hdkAppKey + "/");
-            reqData.append("nav/" + 5+ "/");
+            reqData.append("nav/" + nav + "/");
             reqData.append("price_min/" + collectBean.getPrice() + "/");
             reqData.append("price_max/" + collectBean.getPrice_max() + "/");
             reqData.append("sale_min/" + collectBean.getSalesVolume() + "/");
@@ -324,39 +332,37 @@ public class CollectServiceImpl implements CollectService {
     public void collectJD(CollectBean collectBean) {
         String jdUrl = settingDao.querySetting("MiaoJdUrl").getConfigValue();
         String appkey = settingDao.querySetting("MiaoAppKey").getConfigValue();
-        Long TaoBaoForSum = Long.valueOf(settingDao.querySetting("TaoBaoForSum").getConfigValue());
-        Integer cid = collectBean.getOpt();
+//        Long TaoBaoForSum = Long.valueOf(settingDao.querySetting("TaoBaoForSum").getConfigValue());
+        //类目筛选
+        Integer cid = collectBean.getOpt();       //类目筛选
+        Integer start = 1;
+        //佣金筛选
         Double commissionSelet = collectBean.getCommission();
+        //销量筛选
         Integer salesVolume = collectBean.getSalesVolume();
-        Integer collectCountMax = collectBean.getCollectCount();
+        //采集数量
+//        Integer collectCountMax = collectBean.getCollectCount();
         List<Long> collectCount = new ArrayList<>();
         SysCollectlog sysCollectlog = new SysCollectlog();
         Double price1 = collectBean.getPrice();
         Integer amount = collectBean.getAmount();
         Double price_max = collectBean.getPrice_max();
-        for (long j = 1; j < TaoBaoForSum; j++) {
-            if (collectCountMax <= collectCount.size()) {
-                sysCollectlog.setSum(collectCount.size());
-                sysCollectlogService.save(sysCollectlog);
-                redisUtils.delete("jdcollect");
-                break;
-            }
+        JSONArray dataArray = new JSONArray();
+        while (true) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 redisUtils.delete("jdcollect");
-
+                log.warning("京东采集线程异常采集退出 ");
                 e.printStackTrace();
-
+                break;
             }
-
-            JSONArray dataArray;
             String jdurl = jdUrl + "/getjdunionitems?";
             Map<String, String> urlSign = new HashMap<>();
             urlSign.put("apkey", appkey);
             urlSign.put("cid1", cid.toString());
             urlSign.put("pageSize", String.valueOf(30));
-            urlSign.put("pageIndex", String.valueOf(j));
+            urlSign.put("pageIndex", String.valueOf(start));
             if (price1 != null && price_max != null) {
                 urlSign.put("pricefrom", price1.toString());
                 urlSign.put("priceto", price_max.toString());
@@ -366,69 +372,164 @@ public class CollectServiceImpl implements CollectService {
             try {
                 linkStringByGet = NetUtils.createLinkStringByGet(urlSign);
             } catch (UnsupportedEncodingException e) {
+                redisUtils.delete("jdcollect");
+                log.warning("京东采集URL参数异常采集退出 ");
+
+
                 e.printStackTrace();
+                break;
             }
+            String res = null;
             try {
-
-                String res = restTemplate.getForObject(jdurl + linkStringByGet, String.class);
-                JSONObject allData = JSON.parseObject(res).getJSONObject("data");
-                dataArray = allData.getJSONArray("lists");
-                for (int i = 0; i < dataArray.size(); i++) {
-                    JSONObject jdJson = (JSONObject) dataArray.get(i);
-                    Integer saleCount = jdJson.getInteger("inOrderCount30Days");
-                    if (salesVolume != null && salesVolume > saleCount) {
-                        continue;
-                    }
-
-                    //单价2*
-                    Double price = jdJson.getJSONObject("priceInfo").getDouble("price");
-                    JSONArray coupon = jdJson.getJSONObject("couponInfo").getJSONArray("couponList");
-                    JSONObject img = (JSONObject) jdJson.getJSONObject("imageInfo").getJSONArray("imageList").get(0);
-                    //佣金金额
-                    Double commissionA = jdJson.getJSONObject("commissionInfo").getDouble("commission");
-                    //佣金比例
-                    Double comsA = jdJson.getJSONObject("commissionInfo").getDouble("commissionShare");
-                    //佣金比例
-                    BigDecimal coms = new BigDecimal(comsA);
-
-                    //佣金金额
-                    BigDecimal commission = new BigDecimal(commissionA);
-                    if (commissionSelet != null && commissionSelet > commission.doubleValue()) {
-                        continue;
-                    }
-
-                    BigDecimal priceall = new BigDecimal(price);
-                    JSONObject couponList = (JSONObject) coupon.get(0);
-                    BigDecimal discount = new BigDecimal(couponList.getInteger("discount"));
-                    if (amount != null && amount > discount.intValue()) {
-                        continue;
-                    }
-
-                    BigDecimal subtract = priceall.subtract(discount);
-                    collectCount.add(Long.valueOf(i));
-                    Map<String, Object> h = new HashMap<>();
-                    h.put("zkFinalPrice", subtract.doubleValue());
-                    h.put("coupon", discount.doubleValue());
-                    h.put("jdurl", "http://" + jdJson.getString("materialUrl"));
-                    h.put("pictUrl", img.getString("url"));
-                    h.put("shopTitle", jdJson.getJSONObject("shopInfo").getString("shopName"));
-                    h.put("title", jdJson.getString("skuName"));
-                    h.put("commissionRate", coms.doubleValue());
-                    h.put("comssion", commission.doubleValue());
-                    h.put("cid", cid);
-                    h.put("volume", saleCount);
-                    h.put("numIid", jdJson.getLong("skuId"));
-                    sysJhTaobaoAllDao.saveJd(h);
-
-
-                }
+                res = restTemplate.getForObject(jdurl + linkStringByGet, String.class);
             } catch (Exception e) {
+                redisUtils.delete("jdcollect");
+                log.warning("京东采集URL参数异常采集退出 ");
+                e.printStackTrace();
+                break;
+            }
+            JSONObject allData = JSON.parseObject(res).getJSONObject("data");
+            dataArray = allData.getJSONArray("lists");
+            if (dataArray==null){
                 sysCollectlog.setSum(collectCount.size());
                 sysCollectlogService.save(sysCollectlog);
                 redisUtils.delete("jdcollect");
+                log.warning("京东采集结束");
+                break;
             }
+            for (int i = 0; i < dataArray.size(); i++) {
+                JSONObject jdJson = (JSONObject) dataArray.get(i);
+                Integer saleCount = jdJson.getInteger("inOrderCount30Days");
+                if (salesVolume != null && salesVolume > saleCount) {
+                    continue;
+                }
+                //单价2*
+                JSONObject couponInfo = jdJson.getJSONObject("couponInfo");
+                Double price = jdJson.getJSONObject("priceInfo").getDouble("price");
+                JSONArray coupon = couponInfo.getJSONArray("couponList");
+                JSONObject img = (JSONObject) jdJson.getJSONObject("imageInfo").getJSONArray("imageList").get(0);
+                //佣金金额
+                Double commissionA = jdJson.getJSONObject("commissionInfo").getDouble("commission");
+                //佣金比例
+                Double comsA = jdJson.getJSONObject("commissionInfo").getDouble("commissionShare");
+                //佣金比例
+                BigDecimal coms = new BigDecimal(comsA);
+
+                //佣金金额
+                BigDecimal commission = new BigDecimal(commissionA);
+                if (commissionSelet != null && commissionSelet > commission.doubleValue()) {
+                    continue;
+                }
+
+                BigDecimal priceall = new BigDecimal(price);
+                JSONObject couponList = null;
+                try {
+                    couponList = (JSONObject) coupon.get(0);
+                } catch (Exception e) {
+                    continue;
+                }
+                BigDecimal discount = new BigDecimal(couponList.getInteger("discount"));
+                if (amount != null && amount > discount.intValue()) {
+                    continue;
+                }
+                BigDecimal subtract = priceall.subtract(discount);
+                float comssionJd=subtract.floatValue()*comsA.intValue()/100;
+
+                Map<String, Object> h = new HashMap<>();
+                h.put("zkFinalPrice", subtract.doubleValue());
+                h.put("coupon", discount.doubleValue());
+                h.put("jdurl", "http://" + jdJson.getString("materialUrl"));
+                h.put("pictUrl", img.getString("url"));
+                h.put("shopTitle", jdJson.getJSONObject("shopInfo").getString("shopName"));
+                h.put("title", jdJson.getString("skuName"));
+                h.put("commissionRate", coms.doubleValue());
+                h.put("comssion", comssionJd);
+                h.put("cid", cid);
+                h.put("volume", saleCount);
+                h.put("numIid", jdJson.getLong("skuId"));
+                sysJhTaobaoAllDao.saveJd(h);
+
+            }
+            if (dataArray == null || dataArray.size() != 30) {
+                sysCollectlog.setSum(collectCount.size());
+                sysCollectlogService.save(sysCollectlog);
+                redisUtils.delete("jdcollect");
+                log.warning("京东采集结束");
+                break;
+            }
+            start++;
+
         }
 
+    }
+
+    @Async
+    public void collectPDD(CollectBean collectBean) {
+        String pddkey = settingDao.querySetting("PDDKEY").getConfigValue();
+        String pddsecret = settingDao.querySetting("PDDSECRET").getConfigValue();
+        PopClient client = new PopHttpClient(pddkey, pddsecret);
+        //采集循环次数
+        Integer timeout = collectBean.getTimeout();
+        if (timeout == 0) {
+            SysCollectlog collectlog = new SysCollectlog();
+            collectlog.setSum(0);
+            sysCollectlogService.save(collectlog);
+            redisUtils.delete("pddcollect");
+            return;
+        }
+        //采集类型
+        Integer sort_type = collectBean.getOpt();
+        if (sort_type == null || sort_type.equals("")) {
+            sort_type = 0;
+        }
+        Integer start = 1;
+        Integer collectCount = 0;
+        while (timeout + 1 != start) {
+            try {
+                PddDdkTopGoodsListQueryRequest request = new PddDdkTopGoodsListQueryRequest();
+                request.setOffset(start);
+                request.setSortType(sort_type);
+                request.setLimit(400);
+                PddDdkTopGoodsListQueryResponse response = client.syncInvoke(request);
+                response.getTopGoodsListGetResponse().getTotal();
+                List<PddDdkTopGoodsListQueryResponse.ListItem> list = response.getTopGoodsListGetResponse().getList();
+                for (int i = 0; i < list.size(); i++) {
+                    PddDdkTopGoodsListQueryResponse.ListItem listItem = list.get(i);
+                    Long promotion_rate = listItem.getPromotionRate();
+                    Long min_group_price = listItem.getMinGroupPrice();
+                    Long coupon_discount = listItem.getCouponDiscount();
+                    Float after = Float.valueOf(min_group_price - coupon_discount);
+                    Float promoto = Float.valueOf(promotion_rate) / 1000;
+                    Float comssion = Float.valueOf(after * promoto);
+                    Map<String, Object> h = new HashMap<>();
+                    h.put("zkFinalPrice", min_group_price / 100);
+                    h.put("coupon", coupon_discount / 100);
+                    h.put("pictUrl", listItem.getGoodsThumbnailUrl());
+                    h.put("shopTitle", listItem.getMallName());
+                    h.put("title", listItem.getGoodsName());
+                    h.put("commissionRate", listItem.getPromotionRate() / 10);
+                    h.put("couponPrice", after / 100);
+                    h.put("commission", comssion / 100);
+                    h.put("opt", sort_type);
+                    h.put("cat", listItem.getOptId());
+                    h.put("volume", listItem.getSoldQuantity());
+                    h.put("numIid", listItem.getGoodsId());
+                    Integer save = sysJhPddAllDao.save(h);
+                    if (save == 1) {
+                        collectCount++;
+                    }
+                }
+            } catch (Exception e) {
+                log.warning(e.getMessage() + "拼多多采集错误");
+                e.printStackTrace();
+
+            }
+            start++;
+        }
+        SysCollectlog collectlog = new SysCollectlog();
+        collectlog.setSum(collectCount);
+        sysCollectlogService.save(collectlog);
+        redisUtils.delete("pddcollect");
     }
 
     public static BigDecimal commissonAritTaobao(String zk, String rate, Integer copuon) {

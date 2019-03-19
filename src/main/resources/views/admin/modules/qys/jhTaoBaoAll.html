@@ -27,21 +27,15 @@
             </div>
             <div class="panel-body">
                 <div class="row">
+
                     <div class="form-group col-sm-2">
-                        <input type="text"  class="form-control" v-model="q.title"
+                        <input type="text" class="form-control" v-model="q.title"
                                @keyup.enter="query" placeholder="标题">
-                        <input type="text"  class="form-control" v-model="q.commiss"
+                        <input type="text" class="form-control" v-model="q.commiss"
                                placeholder="佣金大于">
                     </div>
                     <div class="form-group col-sm-2">
-                        <input type="text"  class="form-control" v-model="q.volume"
-                               placeholder="销量大于">
-                        <input type="text" class="form-control" v-model="q.coupon"
-                               placeholder="优惠券大于">
-
-                    </div>
-                    <div class="form-group col-sm-2">
-                        <select class="form-control" v-model="q.goodType">
+                        <select class="form-control" v-model="q.opt">
                             <option value="">选择商品库</option>
                             <option value="1">上百券</option>
                             <option value="3">九块九</option>
@@ -51,8 +45,29 @@
                             <option value="7">首页</option>
                             <option value="2">聚划算</option>
                         </select>
-                        <a class="btn btn-default" @click="adds">添加到指定库</a>
+                        <input type="text" class="form-control" v-model="q.cat"
+                               placeholder="类目筛选">
+                    </div>
+                    <div class="form-group col-sm-2">
+                        <input type="text" class="form-control" v-model="q.volume"
+                               placeholder="销量大于">
+                        <input type="text" class="form-control" v-model="q.coupon"
+                               placeholder="优惠券大于">
 
+                    </div>
+
+                    <div class="form-group col-sm-2">
+                        <a class="btn btn-default" @click="adds">指定添加到商品库</a>
+                        <select class="form-control" v-model="q.goodType">
+                            <option value="">指定添加到商品库</option>
+                            <option value="1">上百券</option>
+                            <option value="3">九块九</option>
+                            <option value="4">生活家居</option>
+                            <option value="5">爆款</option>
+                            <option value="6">精选</option>
+                            <option value="7">首页</option>
+                            <option value="2">聚划算</option>
+                        </select>
                     </div>
                 </div>
                 <div class="grid-btn">

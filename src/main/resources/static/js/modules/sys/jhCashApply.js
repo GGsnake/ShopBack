@@ -2,8 +2,9 @@ $(function () {
     $("#jqGrid").jqGrid({
         url: baseURL + 'sys/jhcashapply/list',
         datatype: "json",
-        colModel: [			
-			{ label: '用户名', name: 'username', index: 'username', width: 30 , key: true},
+        colModel: [
+
+            { label: '用户名', name: 'username', index: 'username', width: 30 , key: true},
             {label: '身份', name: 'roleid', index: 'roleId', width: 24, formatter: function(value){
                     if (value==1){
                         return "运营商";

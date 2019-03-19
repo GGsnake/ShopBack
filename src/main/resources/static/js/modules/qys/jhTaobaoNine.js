@@ -23,11 +23,9 @@ $(function () {
             {label: '标题', name: 'title', index: 'title', width: 120},
             {
                 label: '佣金比例', name: 'commissionrate', index: 'commissionRate', width: 25, formatter: function (value) {
-                    var v = value / 100;
-                    return v + "%"
+                    return value + "%"
                 }
             },
-
             {
                 label: '佣金', name:
                     'commission', index:

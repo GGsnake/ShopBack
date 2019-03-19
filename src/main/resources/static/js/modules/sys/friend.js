@@ -117,7 +117,6 @@ var vm = new Vue({
             }
             vm.showList = false;
             vm.title = "修改";
-
             vm.getInfo(id)
         },
         saveOrUpdate: function () {

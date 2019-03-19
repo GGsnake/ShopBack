@@ -9,16 +9,13 @@ $(function () {
                 }
             },
 			{ label: '店铺名', name: 'shoptitle', index: 'shopTitle', width: 40 },
-			{ label: '标题', name: 'title', index: 'title', width: 60 },
+			{ label: '标题', name: 'title', index: 'title', width: 50 },
 			{ label: '佣金比例', name: 'commissionrate', index: 'commissionRate', width: 20 },
 			{ label: '优惠卷金额', name: 'coupon', index: 'coupon', width: 20 },
-			{ label: '推客的预估佣金额', name: 'zkfinalprice', index: 'zkFinalPrice', width: 20 },
+			{ label: '预估佣金额', name: 'commission', index: 'commission', width: 20 },
 			{ label: '销量', name: 'volume', index: 'volume', width: 20 },
 			{ label: '商品id', name: 'numiid', index: 'numIid', width: 45 },
-			{ label: '类目属性', name: 'opt', index: 'opt', width: 20 },
 			{ label: '创建时间', name: 'createtime', index: 'createTime', width: 50 },
-			{ label: '', name: 'commission', index: 'commission', width: 10 },
-			{ label: 'cid', name: 'cid', index: 'cid', width: 10 }
         ],
 		viewrecords: true,
         height: "100%",

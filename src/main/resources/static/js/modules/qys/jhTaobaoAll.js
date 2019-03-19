@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/jhtaobaoall/hot/0',
+        url: baseURL + 'sys/jhtaobaoall/allin',
         datatype: "json",
         colModel: [
             {
@@ -23,8 +23,8 @@ $(function () {
             {label: '标题', name: 'title', index: 'title', width: 120},
             {
                 label: '佣金比例', name: 'commissionrate', index: 'commissionRate', width: 25, formatter: function (value) {
-                    var v = value / 100;
-                    return v + "%"
+
+                    return value + "%"
                 }
             },
 
@@ -141,11 +141,13 @@ var vm = new Vue({
     data: {
         q: {
             title: null,
-            mime_type: '',
-            coupon: '',
-            commiss: '',
-            volume: '',
-            goodType: ''
+            mime_type: null,
+            coupon: null,
+            commiss: null,
+            opt: null,
+            volume: null,
+            cat: null,
+            goodType: null
         },
         showList: true,
         title: null,
@@ -212,7 +214,7 @@ var vm = new Vue({
             confirm('确定要删除选中的记录？', function () {
                 $.ajax({
                     type: "POST",
-                    url: baseURL + "sys/attachment/delete",
+                    url: baseURL + "sys/jhtaobaoall/delete",
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {
@@ -231,7 +233,7 @@ var vm = new Vue({
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
-                postData: {'title': vm.q.title, 'mime_type': vm.q.mime_type, 'volume': vm.q.volume, 'coupon': vm.q.coupon, 'commiss': vm.q.commiss},
+                postData: {'title': vm.q.title, 'mime_type': vm.q.mime_type, 'volume': vm.q.volume, 'cat': vm.q.cat, 'opt': vm.q.opt, 'coupon': vm.q.coupon, 'commiss': vm.q.commiss},
                 page: page
             }).trigger("reloadGrid");
         },

@@ -33,6 +33,13 @@
 
 	<select id="queryList" resultType="io.sbed.modules.sys.entity.SysUserinfo">
 		select * from userinfo
+		<where>
+		 status=0
+			<if test="title != null and title != ''">
+				AND userphone LIKE CONCAT('%',#{title},'%')
+				OR username LIKE CONCAT('%',#{title},'%')
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}

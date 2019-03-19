@@ -18,6 +18,10 @@
 		</if>
 	</select>
 
+	<select id="queryObject" resultType="io.sbed.modules.sys.entity.SysDaygoods">
+		select * from jh_day_goods where id = #{value}
+	</select>
+
 	<select id="queryListFirend" resultType="io.sbed.modules.sys.entity.SysDaygoods">
 		select * from jh_friend_dto
 		<choose>

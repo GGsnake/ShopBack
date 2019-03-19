@@ -12,10 +12,7 @@ import io.sbed.modules.sys.util.ImgUploadUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,18 +60,17 @@ public class SysJhFriendContrller extends AbstractController {
 
     }
 
-    //
-//	/**
-//	 * 信息
-//	 */
-//	@RequestMapping("/info/{id}")
+
+	/**
+	 * 信息
+	 */
+	@RequestMapping("/info/{id}")
 //	@RequiresPermissions("sys:jhVideoTutorial:info")
-//	public Result info(@PathVariable("id") Integer id){
-//		SysJhVideoTutorial jhVideoTutorial = jhVideoTutorialService.queryObject(id);
-//
-//		return Result.ok().put("jhVideoTutorial", jhVideoTutorial);
-//	}
-//
+	public Result info(@PathVariable("id") Integer id){
+        SysDaygoods jhVideoTutorial = daygoodsDao.queryObject(id);
+		return Result.ok().put("daygoods", jhVideoTutorial);
+	}
+
     private static final String QNY_URL = "http://qny.quanhuangmaoyi.com/";
 
     /**

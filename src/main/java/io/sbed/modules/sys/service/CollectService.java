@@ -29,9 +29,15 @@ public interface CollectService {
      */
     void collectTaobaoNine(CollectBean collectBean) throws ApiException;
     /**
-     * 淘宝采集9.9包邮
+     * 京东采集
      * @param collectBean
      * @throws ApiException
      */
     void collectJD(CollectBean collectBean) throws ApiException;
+    /**
+     * 拼多多采集
+     * @param collectBean
+     * @throws ApiException
+     */
+    void collectPDD(CollectBean collectBean) throws ApiException;
 }

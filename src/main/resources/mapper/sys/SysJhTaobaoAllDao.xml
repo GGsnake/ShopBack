@@ -48,16 +48,52 @@
         <where>
 
             opt=#{opt} AND status=0
-            <if test="title != null">
+            <if test="title != null and title != ''">
                 AND `title` like concat('%',#{title},'%')
             </if>
-            <if test="commiss != null">
+            <if test="commiss != null  and commiss.trim() != ''">
                 AND commission>=#{commiss}
             </if>
-            <if test="volume != null">
+            <if test="volume != null and volume.trim() != ''">
                 AND volume >= #{volume}
             </if>
-            <if test="coupon != null">
+            <if test="coupon != null and coupon.trim()  != ''">
+                AND coupon >=#{coupon}
+            </if>
+        </where>
+
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="queryListOptAll" resultType="io.sbed.modules.sys.entity.SysJhTaobaoAll">
+        select * from jh_taobao_all
+        <where>
+            status=0
+            <if test="title != null and title != '' ">
+                AND `title` like concat('%',#{title},'%')
+            </if>
+            <if test="commiss != null  and commiss.trim() != ''">
+                AND commission>=#{commiss}
+            </if>
+            <if test="opt != null and opt.trim() != ''">
+                AND opt=#{opt}
+            </if>
+            <if test="volume != null and volume.trim() != ''">
+                AND volume >= #{volume}
+            </if>
+            <if test="cat != null  and cat.trim()  != ''">
+                AND cat = #{cat}
+            </if>
+            <if test="coupon != null and coupon.trim()  != ''">
                 AND coupon >=#{coupon}
             </if>
         </where>
@@ -92,17 +128,42 @@
         select count(*) from jh_taobao_all
         <where>
             opt=#{opt} and status=0
-            <if test="title != null">
+            <if test="title != null and title != ''">
                 and `title` like concat('%',#{title},'%')
             </if>
-            <if test="commiss != null">
+            <if test="commiss != null  and commiss.trim() != ''">
                 AND commission>=#{commiss}
             </if>
 
-            <if test="volume != null">
+            <if test="volume != null and volume.trim() != ''">
                 AND volume >= #{volume}
             </if>
-            <if test="coupon != null">
+            <if test="coupon != null and coupon.trim()  != ''">
+                AND coupon >=#{coupon}
+            </if>
+
+        </where>
+    </select>
+    <select id="queryTotalOptAll" resultType="int">
+        select count(*) from jh_taobao_all
+        <where>
+            status=0
+            <if test="title != null and title != '' ">
+                AND `title` like concat('%',#{title},'%')
+            </if>
+            <if test="commiss != null  and commiss.trim() != ''">
+                AND commission>=#{commiss}
+            </if>
+            <if test="opt != null and opt.trim() != ''">
+                AND opt=#{opt}
+            </if>
+            <if test="volume != null and volume.trim() != ''">
+                AND volume >= #{volume}
+            </if>
+            <if test="cat != null  and cat.trim()  != ''">
+                AND cat = #{cat}
+            </if>
+            <if test="coupon != null and coupon.trim()  != ''">
                 AND coupon >=#{coupon}
             </if>
         </where>
@@ -165,10 +226,7 @@
 			`status`, 
 			`opt`, 
 			`cat`, 
-			`order_coupon`, 
-			`order_commiss`, 
-			`order_volume`, 
-			`createTime`, 
+			`createTime`,
 			`istamll`
 		)
 		values
@@ -186,9 +244,6 @@
 			0,
 			#{opt}, 
 			#{cat},
-			0,
-			0,
-			0,
 			now(),
 			#{istamll}
 		)
